@@ -1,11 +1,18 @@
-import React, {useContext} from 'react';
+import React, {useState, useContext} from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { NavbarProvider, NavbarContext } from './NavbarFooter/NavbarContext';
 
 import './App.css';
 
+import Login from './NavbarFooter/Login';
 import Navbar from './NavbarFooter/Navbar';
 import AppBar from './NavbarFooter/AppBar';
+
+import PayrollReports from './NavBarItems/PayrollReports';
+import StatutoryCompliance from './NavBarItems/StatutoryCompliance';
+import Settings from './NavBarItems/Settings';
+
+import Dashboard from './Dashboard/Dashboard';
 
 import AddEmployee from './EmployeeManagement/AddEmployee';
 import UpdateEmployee from './EmployeeManagement/UpdateEmployee';
@@ -18,22 +25,36 @@ import GenerateTDS from './PayrollProcessing/GenerateTDS';
 import AttendanceReports from './Reports/AttendanceReports';
 import Form16 from './Reports/Form16';
 
-function AppContent () {
+import AssignTasks from './TaskManagement/AssignTasks';
+import TaskHistory from './TaskManagement/TaskHistory';
+
+function AppContent ({ handleLogout }) {
   const { navbarOpen } = useContext(NavbarContext);
 
   return (
     <div className={`App ${navbarOpen ? 'navbar-open' : 'navbar-closed'}`}>
       <Navbar />
-      <AppBar />
+      <AppBar handleLogout={handleLogout} />
       <Routes>
+        <Route path="/payroll-reports" element={<PayrollReports />} />
+        <Route path="/statutory-compliance" element={<StatutoryCompliance />} />
+        <Route path="/settings" element={<Settings />} />
+
+        <Route path="/" element={<Dashboard />} />
+
         <Route path="/add-employee" element={<AddEmployee />} />
         <Route path="/update-employee" element={<UpdateEmployee />} />
         <Route path="/employee-list" element={<EmployeeList />} />
+
         <Route path="/payroll-statements" element={<Payroll />} />
         <Route path="/generate-payslip" element={<GeneratePaySlip />} />
+
         <Route path="/generate-tds-report" element={<GenerateTDS />} />
         <Route path="/attendance-reports" element={<AttendanceReports />} />
         <Route path="/form-16" element={<Form16 />} />
+
+        <Route path="/assign-tasks" element={<AssignTasks />} />
+        <Route path="/task-history" element={<TaskHistory />} />
       </Routes>
     </div>
   );
@@ -41,10 +62,24 @@ function AppContent () {
 
 function App() {
 
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  const handleLogin = () => {
+    setIsLoggedIn(true);
+  };
+
+  const handleLogout = () => {
+    setIsLoggedIn(false);
+  };
+
   return (
     <NavbarProvider>
       <Router>
-        <AppContent />
+        {isLoggedIn ? (
+          <AppContent handleLogout={handleLogout} />
+        ) : (
+          <Login onLogin={handleLogin} />
+        )}
       </Router>
     </NavbarProvider>
   );

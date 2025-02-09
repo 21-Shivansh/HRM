@@ -14,8 +14,11 @@ function Navbar() {
     }
     toggleNavbar();
   };
-
+  
   const toggleDropdown = (index) => {
+    if (!navbarOpen) {
+      toggleNavbar();
+    }
     setDropdownOpen(prevState => {
       const newState = [...prevState];
       newState[index] = !newState[index];
@@ -23,8 +26,15 @@ function Navbar() {
     });
   };
 
+  const handleNavLinkClick = () => {
+    if (navbarOpen) {
+      toggleNavbar();
+      setDropdownOpen(Array(5).fill(false));
+    }
+  };
+
   const navItems = [
-    { title: 'Dashboard', icon: 'fa-tachometer-alt', path: '/dashboard', links: [] },
+    { title: 'Dashboard', icon: 'fa-tachometer-alt', path: '/', links: [] },
     { title: 'Employee Management', icon: 'fa-users', path: '/employee-management', links: [
       { name: 'Add Employee', path: '/add-employee' },
       { name: 'Update Employee', path: '/update-employee' },
@@ -67,7 +77,15 @@ function Navbar() {
               {item.links.length > 0 && (
                 <div className={`dropdown-content ${dropdownOpen[index] ? 'show' : ''}`}>
                   {item.links.map((link, linkIndex) => (
-                    <NavLink to={link.path} activeClassName="active" className="dropdown-text" key={linkIndex}>{link.name}</NavLink>
+                    <NavLink 
+                      to={link.path} 
+                      activeClassName="active" 
+                      className="dropdown-text" 
+                      key={linkIndex}
+                      onClick={handleNavLinkClick} // Add onClick event to close the navbar
+                    >
+                      {link.name}
+                    </NavLink>
                   ))}
                 </div>
               )}

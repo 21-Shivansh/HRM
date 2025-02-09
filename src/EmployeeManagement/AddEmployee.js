@@ -22,9 +22,29 @@ const ButtonStyled = styled(Button)(({ theme }) => ({
   marginTop: theme.spacing(2),
 }));
 
+const departmentOptions = [
+  'HR',
+  'Recruitment and talent acquisition',
+  'Payroll and compensation',
+  'Learning and development',
+  'Employee relations',
+  'Legal and compliance',
+  'Operations and administration',
+  'Sales and business development',
+  'Marketing and branding',
+  'IT and technical support',
+  'Finance and accounting',
+  'Project management',
+  'Workforce planning',
+  'Data analytics',
+  'Admin',
+  'Franchise',
+];
+
 function AddEmployee() {
   const [gender, setGender] = React.useState('');
   const [status, setStatus] = React.useState('');
+  const [department, setDepartment] = React.useState('');
 
   const handleGenderChange = (event) => {
     setGender(event.target.value);
@@ -68,10 +88,22 @@ function AddEmployee() {
               <TextField required id="contact" name="contact" label="Contact Information" fullWidth />
             </Grid>
             <Grid item xs={12} sm={6}>
-              <TextField required id="department" name="department" label="Department" fullWidth />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField required id="position" name="position" label="Position" fullWidth />
+              <FormControlStyled fullWidth>
+                <InputLabel id="department-label">Department</InputLabel>
+                <Select
+                  labelId="department-label"
+                  id="department"
+                  name="department"
+                  value={department}
+                  onChange={(e) => setDepartment(e.target.value)}
+                >
+                  {departmentOptions.map((department) => (
+                    <MenuItem key={department} value={department}>
+                      {department}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControlStyled>
             </Grid>
             <Grid item xs={12} sm={6}>
               <TextField required id="doj" name="doj" label="Date of Joining" type="date" InputLabelProps={{ shrink: true }} fullWidth />

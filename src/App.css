@@ -9,3 +9,9 @@
 .App.navbar-closed {
   margin-left: 5vw;
 }
+
+@media (max-width: 800px) {
+  .App {
+    margin-left: 10vw;
+  }
+}

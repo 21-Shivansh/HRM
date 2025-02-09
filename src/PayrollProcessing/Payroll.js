@@ -1,6 +1,18 @@
 import React from 'react';
 import CustomTable from '../Components/CustomTable';
-import './Payroll.css';
+import { Typography, Paper } from '@mui/material';
+import { styled } from '@mui/material/styles';
+
+const Root = styled('div')(({ theme }) => ({
+  flexGrow: 1,
+  padding: theme.spacing(3),
+}));
+
+const PaperStyled = styled(Paper)(({ theme }) => ({
+  padding: theme.spacing(3),
+  textAlign: 'center',
+  color: theme.palette.text.secondary,
+}));
 
 function Payroll() {
   const payrolls = [
@@ -147,10 +159,14 @@ function Payroll() {
   const payrollData = generatePayrollData(payrolls);
 
   return (
-    <div className="payroll">
-      <h1>Payroll Details</h1>
-      <CustomTable columns={columns} data={payrollData} />
-    </div>
+    <Root>
+      <PaperStyled>
+        <Typography variant="h4" gutterBottom>
+          Payroll Details
+        </Typography>
+        <CustomTable columns={columns} data={payrollData} />
+      </PaperStyled>
+    </Root>
   );
 }
 

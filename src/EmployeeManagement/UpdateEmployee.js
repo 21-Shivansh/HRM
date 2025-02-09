@@ -3,35 +3,54 @@ import { TextField, Button, MenuItem, FormControl, InputLabel, Select, Grid, Typ
 import { styled } from '@mui/material/styles';
 
 const employees = [
-  { id: 'E001', name: 'Aagam Sheth', salary: 29254, department: 'HR', position: 'Manager', doj: '2020-01-15', status: 'Active' },
-  { id: 'E002', name: 'Avadai Marthuvar', salary: 29254, department: 'Finance', position: 'Analyst', doj: '2019-03-22', status: 'Active' },
-  { id: 'E003', name: 'Hrutika Mohal', salary: 22570, department: 'IT', position: 'Developer', doj: '2021-07-01', status: 'Inactive' },
-  { id: 'E004', name: 'Jahnvi Thakker', salary: 50000, department: 'HR', position: 'Executive', doj: '2018-11-30', status: 'Active' },
-  { id: 'E005', name: 'Joyeeta Khaskel', salary: 68550, department: 'Finance', position: 'Manager', doj: '2017-05-14', status: 'Active' },
-  { id: 'E006', name: 'Komal Bhanushali', salary: 68550, department: 'IT', position: 'Developer', doj: '2020-09-23', status: 'Active' },
-  { id: 'E007', name: 'Preshita Rane', salary: 51950, department: 'HR', position: 'Executive', doj: '2019-12-11', status: 'Inactive' },
-  { id: 'E008', name: 'Priyanka Panjwani', salary: 51950, department: 'Finance', position: 'Analyst', doj: '2018-08-19', status: 'Active' },
-  { id: 'E009', name: 'Rajalaxmi Das', salary: 58786, department: 'IT', position: 'Developer', doj: '2021-04-05', status: 'Active' },
-  { id: 'E010', name: 'Rashesh Doshi', salary: 150000, department: 'HR', position: 'Manager', doj: '2016-02-29', status: 'Active' },
-  { id: 'E011', name: 'Rushali Rajgor', salary: 17000, department: 'Finance', position: 'Analyst', doj: '2020-06-17', status: 'Inactive' },
-  { id: 'E012', name: 'Snehal kadu', salary: 51950, department: 'IT', position: 'Developer', doj: '2019-10-10', status: 'Active' },
-  { id: 'E013', name: 'Surbhi Jain', salary: 68550, department: 'HR', position: 'Executive', doj: '2018-01-25', status: 'Active' },
-  { id: 'E014', name: 'Vaishnavi Bhagat', salary: 43160, department: 'Finance', position: 'Analyst', doj: '2021-03-15', status: 'Inactive' },
-  { id: 'E015', name: 'Vedika Tolani', salary: 34254, department: 'IT', position: 'Developer', doj: '2020-12-01', status: 'Active' },
-  { id: 'E016', name: 'Jagruti Doshi', salary: 40000, department: 'HR', position: 'Executive', doj: '2019-07-20', status: 'Active' },
-  { id: 'E017', name: 'Kajal Khamkar', salary: 18595, department: 'Finance', position: 'Analyst', doj: '2021-05-10', status: 'Inactive' },
-  { id: 'E018', name: 'Nishi Doshi', salary: 22500, department: 'IT', position: 'Developer', doj: '2020-11-05', status: 'Active' },
-  { id: 'E019', name: 'Deepti Singh', salary: 21870, department: 'HR', position: 'Executive', doj: '2018-09-30', status: 'Active' },
-  { id: 'E020', name: 'Bankim Doshi', salary: 150000, department: 'Finance', position: 'Manager', doj: '2017-04-18', status: 'Active' },
-  { id: 'E021', name: 'Nita Doshi', salary: 40000, department: 'IT', position: 'Developer', doj: '2019-06-25', status: 'Inactive' },
-  { id: 'E022', name: 'Pragya Doshi', salary: 50000, department: 'HR', position: 'Executive', doj: '2018-02-14', status: 'Active' },
-  { id: 'E023', name: 'Chaitali Doshi', salary: 50000, department: 'Finance', position: 'Analyst', doj: '2020-08-30', status: 'Active' },
-  { id: 'E024', name: 'Preeti Doshi', salary: 50000, department: 'IT', position: 'Developer', doj: '2019-05-22', status: 'Active' },
-  { id: 'E025', name: 'Kinjal Patel', salary: 40000, department: 'HR', position: 'Executive', doj: '2018-10-11', status: 'Active' },
-  { id: 'E026', name: 'Minal Sanghvi', salary: 100000, department: 'Finance', position: 'Manager', doj: '2017-01-05', status: 'Active' },
-  { id: 'E027', name: 'Jigna Sanghvi', salary: 100000, department: 'IT', position: 'Developer', doj: '2020-03-20', status: 'Active' },
-  { id: 'E028', name: 'SAUMYA KIRIT GALA', salary: 100000, department: 'HR', position: 'Manager', doj: '2016-12-15', status: 'Active' },
-  { id: 'E029', name: 'Shreya Santosh Talashilkar', salary: 29454, department: 'Finance', position: 'Analyst', doj: '2021-07-25', status: 'Inactive' },
+  { id: 'E001', name: 'Aagam Sheth', salary: 29254, department: 'HR', doj: '2020-01-15', status: 'Active' },
+  { id: 'E002', name: 'Avadai Marthuvar', salary: 29254, department: 'Finance', doj: '2019-03-22', status: 'Active' },
+  { id: 'E003', name: 'Hrutika Mohal', salary: 22570, department: 'IT', doj: '2021-07-01', status: 'Inactive' },
+  { id: 'E004', name: 'Jahnvi Thakker', salary: 50000, department: 'HR', doj: '2018-11-30', status: 'Active' },
+  { id: 'E005', name: 'Joyeeta Khaskel', salary: 68550, department: 'Finance', doj: '2017-05-14', status: 'Active' },
+  { id: 'E006', name: 'Komal Bhanushali', salary: 68550, department: 'IT', doj: '2020-09-23', status: 'Active' },
+  { id: 'E007', name: 'Preshita Rane', salary: 51950, department: 'HR', doj: '2019-12-11', status: 'Inactive' },
+  { id: 'E008', name: 'Priyanka Panjwani', salary: 51950, department: 'Finance', doj: '2018-08-19', status: 'Active' },
+  { id: 'E009', name: 'Rajalaxmi Das', salary: 58786, department: 'IT', doj: '2021-04-05', status: 'Active' },
+  { id: 'E010', name: 'Rashesh Doshi', salary: 150000, department: 'HR', doj: '2016-02-29', status: 'Active' },
+  { id: 'E011', name: 'Rushali Rajgor', salary: 17000, department: 'Finance', doj: '2020-06-17', status: 'Inactive' },
+  { id: 'E012', name: 'Snehal kadu', salary: 51950, department: 'IT', doj: '2019-10-10', status: 'Active' },
+  { id: 'E013', name: 'Surbhi Jain', salary: 68550, department: 'HR', doj: '2018-01-25', status: 'Active' },
+  { id: 'E014', name: 'Vaishnavi Bhagat', salary: 43160, department: 'Finance', doj: '2021-03-15', status: 'Inactive' },
+  { id: 'E015', name: 'Vedika Tolani', salary: 34254, department: 'IT', doj: '2020-12-01', status: 'Active' },
+  { id: 'E016', name: 'Jagruti Doshi', salary: 40000, department: 'HR', doj: '2019-07-20', status: 'Active' },
+  { id: 'E017', name: 'Kajal Khamkar', salary: 18595, department: 'Finance', doj: '2021-05-10', status: 'Inactive' },
+  { id: 'E018', name: 'Nishi Doshi', salary: 22500, department: 'IT', doj: '2020-11-05', status: 'Active' },
+  { id: 'E019', name: 'Deepti Singh', salary: 21870, department: 'HR', doj: '2018-09-30', status: 'Active' },
+  { id: 'E020', name: 'Bankim Doshi', salary: 150000, department: 'Finance', doj: '2017-04-18', status: 'Active' },
+  { id: 'E021', name: 'Nita Doshi', salary: 40000, department: 'IT', doj: '2019-06-25', status: 'Inactive' },
+  { id: 'E022', name: 'Pragya Doshi', salary: 50000, department: 'HR', doj: '2018-02-14', status: 'Active' },
+  { id: 'E023', name: 'Chaitali Doshi', salary: 50000, department: 'Finance', doj: '2020-08-30', status: 'Active' },
+  { id: 'E024', name: 'Preeti Doshi', salary: 50000, department: 'IT', doj: '2019-05-22', status: 'Active' },
+  { id: 'E025', name: 'Kinjal Patel', salary: 40000, department: 'HR', doj: '2018-10-11', status: 'Active' },
+  { id: 'E026', name: 'Minal Sanghvi', salary: 100000, department: 'Finance', doj: '2017-01-05', status: 'Active' },
+  { id: 'E027', name: 'Jigna Sanghvi', salary: 100000, department: 'IT', doj: '2020-03-20', status: 'Active' },
+  { id: 'E028', name: 'SAUMYA KIRIT GALA', salary: 100000, department: 'HR', doj: '2016-12-15', status: 'Active' },
+  { id: 'E029', name: 'Shreya Santosh Talashilkar', salary: 29454, department: 'Finance', doj: '2021-07-25', status: 'Inactive' },
+];
+
+const departmentOptions = [
+  'HR',
+  'Recruitment and talent acquisition',
+  'Payroll and compensation',
+  'Learning and development',
+  'Employee relations',
+  'Legal and compliance',
+  'Operations and administration',
+  'Sales and business development',
+  'Marketing and branding',
+  'IT and technical support',
+  'Finance and accounting',
+  'Project management',
+  'Workforce planning',
+  'Data analytics',
+  'Admin',
+  'Franchise',
 ];
 
 const Root = styled('div')(({ theme }) => ({
@@ -64,7 +83,6 @@ function UpdateEmployee() {
     gender: '',
     contact: '',
     department: '',
-    position: '',
     doj: '',
     salary: '',
     bankAccount: '',
@@ -204,17 +222,23 @@ function UpdateEmployee() {
                 onChange={handleChange}
                 fullWidth
               />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                required
-                id="position"
-                name="position"
-                label="Position"
-                value={employee.position}
-                onChange={handleChange}
-                fullWidth
-              />
+            </Grid><Grid item xs={12} sm={6}>
+              <FormControlStyled fullWidth>
+                <InputLabel id="department-label">Department</InputLabel>
+                <Select
+                  labelId="department-label"
+                  id="department"
+                  name="department"
+                  value={employee.department}
+                  onChange={handleChange}
+                >
+                  {departmentOptions.map((department) => (
+                    <MenuItem key={department} value={department}>
+                      {department}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControlStyled>
             </Grid>
             <Grid item xs={12} sm={6}>
               <TextField
