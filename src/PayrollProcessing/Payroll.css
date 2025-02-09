@@ -1,0 +1,9 @@
+.payroll {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.payroll h1 {
+  margin-bottom: 20px;
+}

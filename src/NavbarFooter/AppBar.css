@@ -1,0 +1,44 @@
+.app-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: calc(100% - 18vw); /* Adjust width to account for the navbar */
+    margin-left: 18vw;
+    height: 5vh;
+    background-color: #070415;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    transition: width 0.3s ease; /* Add transition for smooth width adjustment */
+  }
+  
+  .app-bar.navbar-closed {
+    margin-left: 5vw;
+    width: 95vw; /* Adjust width when navbar is collapsed */
+  }
+  
+  .app-bar-list {
+    list-style-type: none;
+    display: flex;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .app-bar-item {
+    margin: 0 1em;
+  }
+  
+  .app-bar-link {
+    color: white;
+    text-decoration: none;
+    font-size: 1em;
+  }
+  
+  .app-bar-link.active {
+    font-weight: bold;
+  }
+  
+  .app-bar-link:hover {
+    text-decoration: underline;
+  }

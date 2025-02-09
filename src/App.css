@@ -1,0 +1,11 @@
+.App {
+  margin-left: 18vw;
+  margin-top: 5vh;
+  background-color: #ffffff;
+  height: 95vh;
+  transition: margin-left 0.3s ease; 
+}
+
+.App.navbar-closed {
+  margin-left: 5vw;
+}

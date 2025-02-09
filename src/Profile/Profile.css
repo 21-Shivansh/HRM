@@ -1,0 +1,101 @@
+.hr-profile {
+    padding: 20px;
+  }
+  
+  .hr-profile h1 {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  .personal-details, .projects, .attendance {
+    margin-bottom: 20px;
+  }
+  
+  .personal-details h2, .projects h2, .attendance h2 {
+    margin-bottom: 10px;
+  }
+  
+  .personal-details {
+    display: block; /* Ensure the personal details section is a block element */
+  }
+  
+  .detail-container {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 10px; /* Add some space between each detail container */
+  }
+  
+  .detail {
+    display: flex;
+    align-items: center;
+    background-color: #f0f0f0; /* Grey background color */
+    padding: 10px;
+    border-radius: 5px;
+    width: 100%; /* Ensure the detail container takes full width */
+  }
+  
+  .detail strong {
+    flex: 0 0 30%; /* 30% width for labels */
+    margin-right: 10px;
+  }
+  
+  .detail span {
+    flex: 0 0 35%; /* 60% width for span */
+  }
+  
+  .edit-icon {
+    flex: 0 0 10%; /* 10% width for the pencil icon */
+    cursor: pointer;
+    text-align: right; /* Align the pencil icon to the right */
+    align-self: center; /* Center the pencil icon vertically */
+  }
+  
+  .personal-details p, .projects ul {
+    margin: 5px 0;
+  }
+  
+  .projects ul {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .projects li {
+    background-color: #f4f4f4;
+    padding: 10px;
+    margin-bottom: 5px;
+    border-radius: 5px;
+  }
+  
+  .attendance {
+    width: 100%;
+  }
+  
+  .attendance-chart-container {
+    max-width: 100%; /* Ensure the container takes full width */
+    height: 20vh; /* Set the height of the chart */
+    overflow-x: auto; /* Enable horizontal scrolling */
+    padding-bottom: 20px; /* Add some padding to avoid scrollbar overlap */
+  }
+  
+  .attendance-chart-container canvas {
+    min-width: 100%; /* Ensure the canvas takes full width */
+  }
+  
+  .attendance-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+  }
+  
+  .attendance-buttons button {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .attendance-buttons button:hover {
+    background-color: #0056b3;
+  }
