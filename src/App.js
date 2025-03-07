@@ -25,8 +25,11 @@ import GenerateTDS from './PayrollProcessing/GenerateTDS';
 import AttendanceReports from './Reports/AttendanceReports';
 import Form16 from './Reports/Form16';
 
+import TaskDashboard from './TaskManagement/TaskDashboard';
 import AssignTasks from './TaskManagement/AssignTasks';
+import MyTasks from './TaskManagement/MyTasks';
 import TaskHistory from './TaskManagement/TaskHistory';
+import TaskCategories from './TaskManagement/TaskCategories';
 
 function AppContent ({ handleLogout }) {
   const { navbarOpen } = useContext(NavbarContext);
@@ -53,8 +56,12 @@ function AppContent ({ handleLogout }) {
         <Route path="/attendance-reports" element={<AttendanceReports />} />
         <Route path="/form-16" element={<Form16 />} />
 
+        <Route path="/task-management" element={<TaskDashboard />} />
         <Route path="/assign-tasks" element={<AssignTasks />} />
+        <Route path="/my-tasks" element={<MyTasks />} />
         <Route path="/task-history" element={<TaskHistory />} />
+
+        <Route path="/task-categories" element={<TaskCategories />} />
       </Routes>
     </div>
   );

@@ -51,7 +51,7 @@ function AppBar({ handleLogout }) {
                 {item.title}
               </a>
             ) : (
-              <NavLink to={item.path} activeClassName="active" className="app-bar-link">
+              <NavLink to={item.path} activeclassname="active" className="app-bar-link">
                 {item.title}
               </NavLink>
             )}

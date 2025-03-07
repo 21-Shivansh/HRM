@@ -3,6 +3,7 @@ import { NavLink } from 'react-router-dom';
 import { NavbarContext } from './NavbarContext.js';
 import './Navbar.css';
 import '@fortawesome/fontawesome-free/css/all.min.css';
+import { Dashboard } from '@mui/icons-material';
 
 function Navbar() {
   const { navbarOpen, toggleNavbar } = useContext(NavbarContext);
@@ -50,8 +51,11 @@ function Navbar() {
       { name: 'Form 16', path: '/form-16' }
     ]},
     { title: 'Task Management', icon: 'fa-tasks', path: '/task-management', links: [
-      { name: 'Assign Tasks', path: '/assign-tasks' },
-      { name: 'Task History', path: '/task-history' }
+      { name: 'Task Dashboard', path: '/task-management' },
+      { name: 'Assign New Task', path: '/assign-tasks' },
+      { name: 'My Tasks', path: '/my-tasks' },
+      { name: 'Task History', path: '/task-history' },
+      { name: 'Task Categories', path: '/task-categories' }
     ]}
   ];
 
@@ -79,7 +83,7 @@ function Navbar() {
                   {item.links.map((link, linkIndex) => (
                     <NavLink 
                       to={link.path} 
-                      activeClassName="active" 
+                      activeclassname="active" 
                       className="dropdown-text" 
                       key={linkIndex}
                       onClick={handleNavLinkClick} // Add onClick event to close the navbar
