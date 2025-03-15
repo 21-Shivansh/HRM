@@ -1,127 +1,79 @@
 import React, { useState } from 'react';
-import { TextField, Button, Grid, Typography, Paper, FormControl, InputLabel, Select, MenuItem } from '@mui/material';
-import { styled } from '@mui/material/styles';
-
-const Root = styled('div')(({ theme }) => ({
-  flexGrow: 1,
-  padding: theme.spacing(3),
-}));
-
-const FormControlStyled = styled(FormControl)(({ theme }) => ({
-  margin: theme.spacing(1),
-  minWidth: 120,
-}));
-
-const PaperStyled = styled(Paper)(({ theme }) => ({
-  padding: theme.spacing(3),
-  textAlign: 'center',
-  color: theme.palette.text.secondary,
-}));
-
-const ButtonStyled = styled(Button)(({ theme }) => ({
-  marginTop: theme.spacing(2),
-}));
+import './Settings.css';
 
 const Settings = () => {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [language, setLanguage] = useState('');
-  const [theme, setTheme] = useState('');
+  const [notifications, setNotifications] = useState(false);
 
-  const handleSaveChanges = () => {
-    // Logic to save changes
-    console.log('Saving changes...');
+  const handleSave = () => {
+    // Logic to save settings
+    console.log('Settings saved');
   };
 
   return (
-    <Root>
-      <PaperStyled>
-        <Typography variant="h4" gutterBottom>
-          Settings
-        </Typography>
+    <div className="settings-root">
+      <div className="settings-paper">
+        <h4 className="settings-title">Settings</h4>
         <form noValidate autoComplete="off">
-          <Grid container spacing={3}>
-            <Grid item xs={12}>
-              <Typography variant="h6" gutterBottom>
-                Edit Profile
-              </Typography>
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                required
+          <div className="settings-grid">
+            <div className="settings-grid-item">
+              <label htmlFor="username" className="settings-label">Username</label>
+              <input
+                type="text"
                 id="username"
                 name="username"
-                label="Username"
-                fullWidth
+                className="settings-input"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
-              />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
                 required
+              />
+            </div>
+            <div className="settings-grid-item">
+              <label htmlFor="email" className="settings-label">Email</label>
+              <input
+                type="email"
                 id="email"
                 name="email"
-                label="Email"
-                type="email"
-                fullWidth
+                className="settings-input"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-              />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
                 required
+              />
+            </div>
+            <div className="settings-grid-item">
+              <label htmlFor="password" className="settings-label">Password</label>
+              <input
+                type="password"
                 id="password"
                 name="password"
-                label="Password"
-                type="password"
-                fullWidth
+                className="settings-input"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
+                required
               />
-            </Grid>
-            <Grid item xs={12}>
-              <Typography variant="h6" gutterBottom>
-                Preferences
-              </Typography>
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <FormControlStyled fullWidth>
-                <InputLabel>Language</InputLabel>
-                <Select
-                  value={language}
-                  onChange={(e) => setLanguage(e.target.value)}
-                >
-                  <MenuItem value="en">English</MenuItem>
-                  <MenuItem value="es">Spanish</MenuItem>
-                  <MenuItem value="fr">French</MenuItem>
-                  <MenuItem value="de">German</MenuItem>
-                </Select>
-              </FormControlStyled>
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <FormControlStyled fullWidth>
-                <InputLabel>Theme</InputLabel>
-                <Select
-                  value={theme}
-                  onChange={(e) => setTheme(e.target.value)}
-                >
-                  <MenuItem value="light">Light</MenuItem>
-                  <MenuItem value="dark">Dark</MenuItem>
-                </Select>
-              </FormControlStyled>
-            </Grid>
-            <Grid item xs={12}>
-              <ButtonStyled variant="contained" color="primary" onClick={handleSaveChanges}>
-                Save Changes
-              </ButtonStyled>
-            </Grid>
-          </Grid>
+            </div>
+            <div className="settings-grid-item">
+              <label htmlFor="notifications" className="settings-label">Notifications</label>
+              <input
+                type="checkbox"
+                id="notifications"
+                name="notifications"
+                className="settings-checkbox"
+                checked={notifications}
+                onChange={(e) => setNotifications(e.target.checked)}
+              />
+            </div>
+            <div className="settings-grid-item">
+              <button type="button" className="settings-button" onClick={handleSave}>
+                Save Settings
+              </button>
+            </div>
+          </div>
         </form>
-      </PaperStyled>
-    </Root>
+      </div>
+    </div>
   );
 };
 

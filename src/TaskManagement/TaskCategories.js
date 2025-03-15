@@ -1,24 +1,5 @@
 import React, { useState } from 'react';
-import { TextField, Button, IconButton, Grid, Typography, Paper } from '@mui/material';
-import { styled } from '@mui/material/styles';
-import EditIcon from '@mui/icons-material/Edit';
-import DeleteIcon from '@mui/icons-material/Delete';
-
-const Root = styled('div')(({ theme }) => ({
-  flexGrow: 1,
-  padding: theme.spacing(3),
-}));
-
-const PaperStyled = styled(Paper)(({ theme }) => ({
-  padding: theme.spacing(2),
-  textAlign: 'left',
-  color: theme.palette.text.secondary,
-  marginBottom: theme.spacing(2),
-}));
-
-const ButtonStyled = styled(Button)(({ theme }) => ({
-  marginTop: theme.spacing(2),
-}));
+import './TaskCategories.css';
 
 const TaskCategories = () => {
   const [categories, setCategories] = useState([
@@ -68,62 +49,56 @@ const TaskCategories = () => {
   };
 
   return (
-    <Root>
-      <PaperStyled>
-        <Typography variant="h4" gutterBottom align="center">
-          Task Categories
-        </Typography>
-        <Grid container direction="column" alignItems="center" spacing={2}>
-          <Grid item xs={15} sm={8}>
-            <TextField
-              label="New Category"
-              value={newCategory}
-              onChange={(e) => setNewCategory(e.target.value)}
-              fullWidth
-            />
-          </Grid>
-          <Grid item>
-            <ButtonStyled variant="contained" color="primary" onClick={handleAddCategory}>
-              Add Category
-            </ButtonStyled>
-          </Grid>
-        </Grid>
-      </PaperStyled>
-      <Grid container spacing={3}>
+    <div className="taskcategories-root">
+      <div className="taskcategories-paper">
+        <h4 className="taskcategories-title">Task Categories</h4>
+        <div className="taskcategories-form">
+          <input
+            type="text"
+            placeholder="New Category"
+            value={newCategory}
+            onChange={(e) => setNewCategory(e.target.value)}
+            className="taskcategories-input"
+          />
+          <button onClick={handleAddCategory} className="taskcategories-button">
+            Add Category
+          </button>
+        </div>
+      </div>
+      <div className="taskcategories-grid">
         {categories.map((category, index) => (
-          <Grid item xs={12} sm={4} key={index}>
-            <PaperStyled>
+          <div className="taskcategories-grid-item" key={index}>
+            <div className="taskcategories-paper">
               {editIndex === index ? (
                 <>
-                  <TextField
+                  <input
+                    type="text"
                     value={editCategory}
                     onChange={(e) => setEditCategory(e.target.value)}
-                    fullWidth
+                    className="taskcategories-input"
                   />
-                  <ButtonStyled variant="contained" color="primary" onClick={handleSaveEditCategory}>
+                  <button onClick={handleSaveEditCategory} className="taskcategories-button">
                     Save
-                  </ButtonStyled>
+                  </button>
                 </>
               ) : (
-                <Grid container alignItems="center">
-                  <Grid item xs>
-                    <Typography variant="h6">{category}</Typography>
-                  </Grid>
-                  <Grid item>
-                    <IconButton onClick={() => handleEditCategory(index)} color="primary">
-                      <EditIcon />
-                    </IconButton>
-                    <IconButton onClick={() => handleDeleteCategory(index)} color="error">
-                      <DeleteIcon />
-                    </IconButton>
-                  </Grid>
-                </Grid>
+                <div className="taskcategories-item">
+                  <span className="taskcategories-item-text">{category}</span>
+                  <div className="taskcategories-item-buttons">
+                    <button onClick={() => handleEditCategory(index)} className="taskcategories-icon-button">
+                      ✏️
+                    </button>
+                    <button onClick={() => handleDeleteCategory(index)} className="taskcategories-icon-button">
+                      🗑️
+                    </button>
+                  </div>
+                </div>
               )}
-            </PaperStyled>
-          </Grid>
+            </div>
+          </div>
         ))}
-      </Grid>
-    </Root>
+      </div>
+    </div>
   );
 };
 

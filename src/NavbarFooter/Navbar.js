@@ -3,6 +3,7 @@ import { NavLink } from 'react-router-dom';
 import { NavbarContext } from './NavbarContext.js';
 import './Navbar.css';
 import '@fortawesome/fontawesome-free/css/all.min.css';
+import TCLogo from '../Components/TalentCornerLogo.jpeg'
 import { Dashboard } from '@mui/icons-material';
 
 function Navbar() {
@@ -54,17 +55,19 @@ function Navbar() {
       { name: 'Task Dashboard', path: '/task-management' },
       { name: 'Assign New Task', path: '/assign-tasks' },
       { name: 'My Tasks', path: '/my-tasks' },
-      { name: 'Task History', path: '/task-history' },
-      { name: 'Task Categories', path: '/task-categories' }
+      { name: 'Task Delegated', path: '/task-delegated' },
+      { name: 'Task Categories', path: '/task-categories' },
+      { name: 'Task Templates', path: '/task-template' }
     ]}
   ];
 
   return (
     <div>
       <div className={`navbar ${navbarOpen ? 'open' : ''}`}>
-        <div className="navbar-header">
+        <div className="navbar-header" onClick={handleToggleNavbar}>
+          <img src={TCLogo} alt="Talent Corner Logo" className="navbar-logo" />
           <span className="navbar-title">Talent Corner</span>
-          <span className={`right-arrow ${navbarOpen ? 'open' : ''}`} onClick={handleToggleNavbar}>
+          <span className={`right-arrow ${navbarOpen ? 'open' : ''}`} >
             &#9654;
           </span>
         </div>

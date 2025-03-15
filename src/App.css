@@ -1,17 +1,26 @@
+body, :root {
+  margin: 0;
+  width: 100vw;
+  height: 100vh;    
+  overflow-y: hidden;
+}
+
 .App {
-  margin-left: 18vw;
-  margin-top: 5vh;
-  background-color: #ffffff;
+  margin-left: 5vw !important;
+  margin-top: 7vh;
+  background-color: #fbf9ff;
   height: 95vh;
-  transition: margin-left 0.3s ease; 
+  transition: margin-left 0.3s ease;
+  padding: 2vw;
 }
-
+/*
 .App.navbar-closed {
-  margin-left: 5vw;
+  margin-left: 10vw;
 }
 
+*/
 @media (max-width: 800px) {
   .App {
-    margin-left: 10vw;
+    margin-left: 10vw !important;
   }
 }

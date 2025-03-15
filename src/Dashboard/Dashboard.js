@@ -2,28 +2,12 @@ import React from 'react';
 import { Pie, Bar } from 'react-chartjs-2';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend, CategoryScale, LinearScale, BarElement } from 'chart.js';
 import Slider from 'react-slick';
-import { Typography, Paper, Grid, Button } from '@mui/material';
-import { styled } from '@mui/material/styles';
+import './Dashboard.css';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
+import { maxWidth } from '@mui/system';
 
 ChartJS.register(ArcElement, Tooltip, Legend, CategoryScale, LinearScale, BarElement);
-
-const Root = styled('div')(({ theme }) => ({
-  flexGrow: 1,
-  padding: theme.spacing(3),
-}));
-
-const PaperStyled = styled(Paper)(({ theme }) => ({
-  padding: theme.spacing(3),
-  textAlign: 'center',
-  color: theme.palette.text.secondary,
-  marginBottom: theme.spacing(3),
-}));
-
-const ButtonStyled = styled(Button)(({ theme }) => ({
-  marginTop: theme.spacing(2),
-}));
 
 const chartOptions = {
   maintainAspectRatio: false,
@@ -31,23 +15,22 @@ const chartOptions = {
 };
 
 const chartContainerStyle = {
-  height: '50vh',
+  maxWidth: '100%',
 };
 
 const barChartOptions = {
-    ...chartOptions,
-    scales: {
-      y: {
-        ticks: {
-          beginAtZero: true,
-          precision: 0, 
-        },
+  ...chartOptions,
+  scales: {
+    y: {
+      ticks: {
+        beginAtZero: true,
+        precision: 0,
       },
     },
-  };
+  },
+};
 
 const Dashboard = () => {
-
   const employees = [
     { id: 'E001', name: 'Aagam Sheth', status: 'Active', department: 'HR' },
     { id: 'E002', name: 'Avadai Marthuvar', status: 'Active', department: 'Recruitment and talent acquisition' },
@@ -77,7 +60,7 @@ const Dashboard = () => {
     { id: 'E026', name: 'Minal Sanghvi', status: 'Active', department: 'IT and technical support' },
     { id: 'E027', name: 'Jigna Sanghvi', status: 'Active', department: 'Finance and accounting' },
     { id: 'E028', name: 'SAUMYA KIRIT GALA', status: 'Active', department: 'Project management' },
-    { id: 'E029', name: 'Shreya Santosh Talashilkar', status: 'Inactive', department: 'Workforce planning' }
+    { id: 'E029', name: 'Shreya Santosh Talashilkar', status: 'Inactive', department: 'Workforce planning' },
   ];
 
   const employeeStatusMap = employees.map((employee) => ({
@@ -86,9 +69,9 @@ const Dashboard = () => {
     status: employee.status,
     department: employee.department,
   }));
-  
+
   const uniqueDepartments = [...new Set(employees.map((employee) => employee.department))];
-  
+
   const pieData = {
     labels: ['Active Employees', 'Inactive Employees'],
     datasets: [
@@ -125,93 +108,85 @@ const Dashboard = () => {
   };
 
   return (
-    <Root>
-      <PaperStyled>
-        <Typography variant="h4" gutterBottom>
-          Employee Statistics
-        </Typography>
-        <Grid container spacing={3}>
-          <Grid item xs={12} sm={6}>
-            <Typography variant="h6">Active vs Inactive Employees</Typography>
+    <div className="dashboard-root">
+      <div className="dashboard-paper">
+        <h4 className="dashboard-title">Employee Statistics</h4>
+        <div className="dashboard-grid">
+          <div className="dashboard-grid-item">
+            <h6>Active vs Inactive Employees</h6>
             <div style={chartContainerStyle}>
               <Pie data={pieData} options={chartOptions} />
             </div>
-          </Grid>
-          <Grid item xs={12} sm={6}>
-            <Typography variant="h6">Employees by Department</Typography>
+          </div>
+          <div className="dashboard-grid-item">
+            <h6>Employees by Department</h6>
             <div style={chartContainerStyle}>
               <Bar data={departmentData} options={barChartOptions} />
             </div>
-          </Grid>
-        </Grid>
-      </PaperStyled>
+          </div>
+        </div>
+      </div>
 
-      <PaperStyled>
-        <Typography variant="h4" gutterBottom>
-          Upcoming Payrolls
-        </Typography>
+      <div className="dashboard-paper">
+        <h4 className="dashboard-title">Upcoming Payrolls</h4>
         <Slider {...sliderSettings}>
-          <div>
-            <Typography variant="h6">Next Payroll Date: 2025-03-01</Typography>
-            <ButtonStyled variant="contained" color="primary" href="/generate-payslip">
+          <div className="payroll-container">
+            <h6>Next Payroll Date: 2025-03-01</h6>
+            <button className="dashboard-button" onClick={() => window.location.href = '/generate-payslip'}>
               Generate Payslips
-            </ButtonStyled>
+            </button>
           </div>
           <div>
-            <Typography variant="h6">Next Payroll Date: 2025-04-01</Typography>
-            <ButtonStyled variant="contained" color="primary" href="/generate-payslip">
+            <h6>Next Payroll Date: 2025-04-01</h6>
+            <button className="dashboard-button" onClick={() => window.location.href = '/generate-payslip'}>
               Generate Payslips
-            </ButtonStyled>
+            </button>
           </div>
         </Slider>
-      </PaperStyled>
+      </div>
 
-      <PaperStyled>
-        <Typography variant="h4" gutterBottom>
-          Recent Payslips
-        </Typography>
-        <Grid container spacing={3}>
-          <Grid item xs={12} sm={4}>
-            <Typography variant="h6">Employee ID: E001</Typography>
-            <Typography variant="body1">Date Range: 2025-01-01 to 2025-01-31</Typography>
-            <ButtonStyled variant="contained" color="primary" href="/download-payslip/E001">
+      <div className="dashboard-paper">
+        <h4 className="dashboard-title">Recent Payslips</h4>
+        <div className="dashboard-grid">
+          <div className="dashboard-grid-item-carousel">
+            <h6>Employee ID: E001</h6>
+            <p>Date Range: 2025-01-01 to 2025-01-31</p>
+            <button className="dashboard-button" onClick={() => window.location.href = '/download-payslip/E001'}>
               Download Payslip
-            </ButtonStyled>
-          </Grid>
-          <Grid item xs={12} sm={4}>
-            <Typography variant="h6">Employee ID: E002</Typography>
-            <Typography variant="body1">Date Range: 2025-01-01 to 2025-01-31</Typography>
-            <ButtonStyled variant="contained" color="primary" href="/download-payslip/E002">
+            </button>
+          </div>
+          <div className="dashboard-grid-item-carousel">
+            <h6>Employee ID: E002</h6>
+            <p>Date Range: 2025-01-01 to 2025-01-31</p>
+            <button className="dashboard-button" onClick={() => window.location.href = '/download-payslip/E002'}>
               Download Payslip
-            </ButtonStyled>
-          </Grid>
-          <Grid item xs={12} sm={4}>
-            <Typography variant="h6">Employee ID: E003</Typography>
-            <Typography variant="body1">Date Range: 2025-01-01 to 2025-01-31</Typography>
-            <ButtonStyled variant="contained" color="primary" href="/download-payslip/E003">
+            </button>
+          </div>
+          <div className="dashboard-grid-item-carousel">
+            <h6>Employee ID: E003</h6>
+            <p>Date Range: 2025-01-01 to 2025-01-31</p>
+            <button className="dashboard-button" onClick={() => window.location.href = '/download-payslip/E003'}>
               Download Payslip
-            </ButtonStyled>
-          </Grid>
-        </Grid>
-      </PaperStyled>
+            </button>
+          </div>
+        </div>
+      </div>
 
-      <PaperStyled>
-        <Typography variant="h4" gutterBottom>
-          Tax Compliance
-        </Typography>
+      <div className="dashboard-paper">
+        <h4 className="dashboard-title">Tax Compliance</h4>
         <Slider {...sliderSettings}>
           <div>
-            <Typography variant="h6">PF Due Date: 2025-02-15</Typography>
+            <h6>PF Due Date: 2025-02-15</h6>
           </div>
           <div>
-            <Typography variant="h6">ESI Due Date: 2025-02-20</Typography>
+            <h6>ESI Due Date: 2025-02-20</h6>
           </div>
           <div>
-            <Typography variant="h6">TDS Due Date: 2025-02-25</Typography>
+            <h6>TDS Due Date: 2025-02-25</h6>
           </div>
         </Slider>
-      </PaperStyled>
-    </Root>
+      </div>
+    </div>
   );
 };
 

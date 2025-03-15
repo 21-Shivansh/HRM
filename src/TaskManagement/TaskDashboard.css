@@ -1,0 +1,133 @@
+.taskdash-root {
+  overflow-y: hidden;
+}
+.taskdash-title {
+  font-size: 1.5rem;
+  margin-bottom: 2vh;
+  margin-top: 0;
+  text-align: center;
+}
+
+.taskdash-form-control {
+  margin-bottom: 2vh;
+}
+
+.taskdash-label {
+  display: block;
+  margin-bottom: 1vh;
+}
+
+.taskdash-select {
+  width: 100%;
+  padding: 1vh;
+  font-size: 1rem;
+}
+
+.taskdash-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2vw;
+  margin-top: 2vh;
+  justify-content: space-evenly;
+  margin-bottom: 2vh;
+}
+
+.taskdash-stat-box {
+  flex: 1 1 calc(25% - 2vw);
+  padding: 2vh;
+  text-align: center;
+  background-color: #f5f5f5;
+  border-radius: 1vw;
+  box-shadow: 0 0.3vh 0.6vh rgba(0, 0, 0, 0.1);
+}
+
+.taskdash-stat-title {
+  font-size: 1rem;
+  margin-bottom: 1vh;
+}
+
+.taskdash-stat-value {
+  font-size: 1.25rem;
+  margin-bottom: 0;
+}
+
+.taskdash-pending {
+  background-color: #ffcccb; /* Light red */
+}
+
+.taskdash-in-progress {
+  background-color: #ffff99; /* Light yellow */
+}
+
+.taskdash-completed {
+  background-color: #ccffcc; /* Light green */
+}
+
+.taskdash-section {
+  width: 40%;
+  padding: 2vh;
+  background-color: #f5f5f5;
+  border-radius: 1vw;
+  height: 30vh;
+  box-shadow: 0 0.3vh 0.6vh rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+.taskdash-section-title {
+  font-size: 1rem;
+  margin-bottom: 2vh;
+  text-align: center;
+}
+
+.taskdash-scrollable-list {
+  max-height: 40vh;
+  overflow-y: auto;
+}
+
+.taskdash-list-item-wrapper {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1vh;
+}
+
+.taskdash-completion-circle {
+  width: 4vw;
+  height: 4vw;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 2vw;
+}
+
+.taskdash-green {
+  background-color: green;
+}
+
+.taskdash-yellow {
+  background-color: yellow;
+}
+
+.taskdash-red {
+  background-color: red;
+}
+
+.taskdash-completion-text {
+  color: white;
+  font-size: 0.75rem;
+}
+
+.taskdash-list-item-text {
+  flex-grow: 1;
+}
+
+.taskdash-list-item-primary {
+  font-size: 1rem;
+  margin: 0;
+}
+
+.taskdash-list-item-secondary {
+  font-size: 0.875rem;
+  color: #666;
+  margin: 0;
+}

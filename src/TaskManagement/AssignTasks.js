@@ -1,56 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { TextField, Button, Grid, Typography, Paper, FormControl, InputLabel, Select, MenuItem, Checkbox, FormControlLabel, ToggleButtonGroup, ToggleButton } from '@mui/material';
-import { styled } from '@mui/material/styles';
-import MicIcon from '@mui/icons-material/Mic';
-import AttachFileIcon from '@mui/icons-material/AttachFile';
-import AssignmentIcon from '@mui/icons-material/Assignment';
-import StopIcon from '@mui/icons-material/Stop';
-import DeleteIcon from '@mui/icons-material/Delete';
-import IconButton from '@mui/material/IconButton';
-import Snackbar from '@mui/material/Snackbar';
-import Alert from '@mui/material/Alert';
+import Select from 'react-select';
+import './AssignTasks.css';
 
-const Root = styled('div')(({ theme }) => ({
-  flexGrow: 1,
-  padding: theme.spacing(3),
-}));
-
-const FormControlStyled = styled(FormControl)(({ theme }) => ({
-  margin: theme.spacing(1),
-  minWidth: 120,
-}));
-
-const PaperStyled = styled(Paper)(({ theme }) => ({
-  padding: theme.spacing(3),
-  textAlign: 'center',
-  color: theme.palette.text.secondary,
-}));
-
-const ButtonStyled = styled(Button)(({ theme }) => ({
-  marginTop: theme.spacing(2),
-  width: '100%',
-  backgroundColor: theme.palette.primary.main,
-  color: theme.palette.primary.contrastText
-}));
-
-const ButtonStyledRightIcon = styled(Button)(({ theme }) => ({
-  marginTop: theme.spacing(2),
-  width: '100%',
-  display: 'flex',
-  justifyContent: 'space-between',
-  backgroundColor: 'none',
-}));
-
-const MenuItemStyled = styled(MenuItem)(({ theme }) => ({
-  '&.Mui-selected': {
-    backgroundColor: '#d3d3d3',
-    '&:hover': {
-      backgroundColor: theme.palette.action.hover,
-    },
-  }
-}));
-
-const AssignTasks = () => {
+const AssignTasks = ({ handleClose, template }) => {
   const [taskTitle, setTaskTitle] = useState('');
   const [description, setDescription] = useState('');
   const [assignedTo, setAssignedTo] = useState([]);
@@ -67,19 +19,66 @@ const AssignTasks = () => {
   const [openSnackbar, setOpenSnackbar] = useState(false);
 
   const employeeOptions = [
-    'Aagam Sheth', 'Avadai Marthuvar', 'Hrutika Mohal', 'Jahnvi Thakker', 'Joyeeta Khaskel',
-    'Komal Bhanushali', 'Preshita Rane', 'Priyanka Panjwani', 'Rajalaxmi Das', 'Rashesh Doshi',
-    'Rushali Rajgor', 'Snehal kadu', 'Surbhi Jain', 'Vaishnavi Bhagat', 'Vedika Tolani',
-    'Jagruti Doshi', 'Kajal Khamkar', 'Nishi Doshi', 'Deepti Singh', 'Bankim Doshi',
-    'Nita Doshi', 'Pragya Doshi', 'Chaitali Doshi', 'Preeti Doshi', 'Kinjal Patel',
-    'Minal Sanghvi', 'Jigna Sanghvi', 'SAUMYA KIRIT GALA', 'Shreya Santosh Talashilkar'
+    { value: 'Aagam Sheth', label: 'Aagam Sheth' },
+    { value: 'Avadai Marthuvar', label: 'Avadai Marthuvar' },
+    { value: 'Hrutika Mohal', label: 'Hrutika Mohal' },
+    { value: 'Jahnvi Thakker', label: 'Jahnvi Thakker' },
+    { value: 'Joyeeta Khaskel', label: 'Joyeeta Khaskel' },
+    { value: 'Komal Bhanushali', label: 'Komal Bhanushali' },
+    { value: 'Preshita Rane', label: 'Preshita Rane' },
+    { value: 'Priyanka Panjwani', label: 'Priyanka Panjwani' },
+    { value: 'Rajalaxmi Das', label: 'Rajalaxmi Das' },
+    { value: 'Rashesh Doshi', label: 'Rashesh Doshi' },
+    { value: 'Rushali Rajgor', label: 'Rushali Rajgor' },
+    { value: 'Snehal kadu', label: 'Snehal kadu' },
+    { value: 'Surbhi Jain', label: 'Surbhi Jain' },
+    { value: 'Vaishnavi Bhagat', label: 'Vaishnavi Bhagat' },
+    { value: 'Vedika Tolani', label: 'Vedika Tolani' },
+    { value: 'Jagruti Doshi', label: 'Jagruti Doshi' },
+    { value: 'Kajal Khamkar', label: 'Kajal Khamkar' },
+    { value: 'Nishi Doshi', label: 'Nishi Doshi' },
+    { value: 'Deepti Singh', label: 'Deepti Singh' },
+    { value: 'Bankim Doshi', label: 'Bankim Doshi' },
+    { value: 'Nita Doshi', label: 'Nita Doshi' },
+    { value: 'Pragya Doshi', label: 'Pragya Doshi' },
+    { value: 'Chaitali Doshi', label: 'Chaitali Doshi' },
+    { value: 'Preeti Doshi', label: 'Preeti Doshi' },
+    { value: 'Kinjal Patel', label: 'Kinjal Patel' },
+    { value: 'Minal Sanghvi', label: 'Minal Sanghvi' },
+    { value: 'Jigna Sanghvi', label: 'Jigna Sanghvi' },
+    { value: 'SAUMYA KIRIT GALA', label: 'SAUMYA KIRIT GALA' },
+    { value: 'Shreya Santosh Talashilkar', label: 'Shreya Santosh Talashilkar' }
   ];
 
   const categoryOptions = [
-    'Customer Testimonials', 'Accounts', 'Customer Referrals', 'Marketing', 'Sales',
-    'Product Development', 'Human Resources', 'IT Support', 'Legal', 'Compliance',
-    'Operations', 'Administration', 'Finance', 'Project Management', 'Research and Development'
+    { value: 'Customer Testimonials', label: 'Customer Testimonials' },
+    { value: 'Accounts', label: 'Accounts' },
+    { value: 'Customer Referrals', label: 'Customer Referrals' },
+    { value: 'Marketing', label: 'Marketing' },
+    { value: 'Sales', label: 'Sales' },
+    { value: 'Product Development', label: 'Product Development' },
+    { value: 'Human Resources', label: 'Human Resources' },
+    { value: 'IT Support', label: 'IT Support' },
+    { value: 'Legal', label: 'Legal' },
+    { value: 'Compliance', label: 'Compliance' },
+    { value: 'Operations', label: 'Operations' },
+    { value: 'Administration', label: 'Administration' },
+    { value: 'Finance', label: 'Finance' },
+    { value: 'Project Management', label: 'Project Management' },
+    { value: 'Research and Development', label: 'Research and Development' }
   ];
+
+  useEffect(() => {
+    if (template) {
+      setTaskTitle(template.name);
+      setDescription(template.description);
+      setCategory([template.category]);
+      setDeadline(`${template.date}T${template.time}`);
+      setRepeat(!!template.repeat);
+      setRepeatFrequency(template.repeat);
+      setPriority(template.priority.toLowerCase());
+    }
+  }, [template]);
 
   const handleAssignTask = () => {
     // Logic to handle task assignment
@@ -144,8 +143,8 @@ const AssignTasks = () => {
     setAttachments(attachments.filter((_, i) => i !== index));
   };
   
-  const handleDeleteVoiceNote = () => {
-    setRecordedDuration(null);
+  const handleDeleteVoiceNote = (index) => {
+    setVoiceNotes(voiceNotes.filter((_, i) => i !== index));
   };
 
   useEffect(() => {
@@ -161,221 +160,205 @@ const AssignTasks = () => {
   }, [recording]);
 
   return (
-    <Root>
-      <PaperStyled>
-        <Typography variant="h4" gutterBottom>
-          Assign New Task
-        </Typography>
+    <div className="popup-overlay taskassign-root">
+      <div className=" popup-content taskassign-paper">
+        <h4 className="taskassign-title">Assign New Task</h4>
+        <button className="popup-close-button" onClick={handleClose}>Close</button>
         <form noValidate autoComplete="off">
-          <Grid container direction="column" spacing={3}>
-            <Grid item xs={12}>
-              <TextField
-                required
+          <div className="taskassign-grid">
+            <div className="taskassign-grid-item">
+              <label htmlFor="taskTitle" className="taskassign-label">Task Title</label>
+              <input
+                type="text"
                 id="taskTitle"
                 name="taskTitle"
-                label="Task Title"
-                fullWidth
+                className="taskassign-input"
                 value={taskTitle}
                 onChange={(e) => setTaskTitle(e.target.value)}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
                 required
+              />
+            </div>
+            <div className="taskassign-grid-item">
+              <label htmlFor="description" className="taskassign-label">Short Description of the Task</label>
+              <input
+                type="text"
                 id="description"
                 name="description"
-                label="Short Description of the Task"
-                fullWidth
+                className="taskassign-input"
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <FormControlStyled fullWidth>
-                <InputLabel id="assignedTo-label">Select User</InputLabel>
-                <Select
-                  labelId="assignedTo-label"
-                  id="assignedTo"
-                  name="assignedTo"
-                  multiple
-                  value={assignedTo}
-                  onChange={(e) => setAssignedTo(e.target.value)}
-                >
-                  {employeeOptions.map((employee) => (
-                    <MenuItemStyled key={employee} value={employee} selected={assignedTo.includes(employee)}>
-                      {employee}
-                    </MenuItemStyled>
-                  ))}
-                </Select>
-              </FormControlStyled>
-            </Grid>
-            <Grid item xs={12}>
-              <FormControlStyled fullWidth>
-                <InputLabel id="category-label">Select Category</InputLabel>
-                <Select
-                  labelId="category-label"
-                  id="category"
-                  name="category"
-                  multiple
-                  value={category}
-                  onChange={(e) => setCategory(e.target.value)}
-                >
-                  {categoryOptions.map((cat) => (
-                    <MenuItemStyled key={cat} value={cat} selected={category.includes(cat)}>
-                      {cat}
-                    </MenuItemStyled>
-                  ))}
-                </Select>
-              </FormControlStyled>
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
                 required
+              />
+            </div>
+            <div className="taskassign-grid-item">
+              <label htmlFor="assignedTo" className="taskassign-label">Select User</label>
+              <Select
+                id="assignedTo"
+                name="assignedTo"
+                className="taskassign-select"
+                isMulti
+                options={employeeOptions}
+                value={employeeOptions.filter(option => assignedTo.includes(option.value))}
+                onChange={(selectedOptions) => setAssignedTo(selectedOptions.map(option => option.value))}
+              />
+            </div>
+            <div className="taskassign-grid-item">
+              <label htmlFor="category" className="taskassign-label">Select Category</label>
+              <Select
+                id="category"
+                name="category"
+                className="taskassign-select"
+                isMulti
+                options={categoryOptions}
+                value={categoryOptions.filter(option => category.includes(option.value))}
+                onChange={(selectedOptions) => setCategory(selectedOptions.map(option => option.value))}
+              />
+            </div>
+            <div className="taskassign-grid-item">
+              <label htmlFor="deadline" className="taskassign-label">Deadline</label>
+              <input
+                type="datetime-local"
                 id="deadline"
                 name="deadline"
-                label="Deadline"
-                type="datetime-local"
-                InputLabelProps={{ shrink: true }}
-                fullWidth
+                className="taskassign-input"
                 value={deadline}
                 onChange={(e) => setDeadline(e.target.value)}
+                required
               />
-            </Grid>
-            <Grid item xs={12}>
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    checked={repeat}
-                    onChange={(e) => setRepeat(e.target.checked)}
-                    name="repeat"
-                    color="primary"
-                  />
-                }
-                label="Repeat"
-              />
-            </Grid>
+            </div>
+            <div className="taskassign-grid-item">
+              <label className="taskassign-checkbox-label">
+                <input
+                  type="checkbox"
+                  checked={repeat}
+                  onChange={(e) => setRepeat(e.target.checked)}
+                  name="repeat"
+                  className="taskassign-checkbox"
+                />
+                Repeat
+              </label>
+            </div>
             {repeat && (
-              <Grid item xs={12}>
-                <FormControlStyled fullWidth>
-                  <InputLabel id="repeat-frequency-label">Repeat Frequency</InputLabel>
-                  <Select
-                    labelId="repeat-frequency-label"
-                    id="repeat-frequency"
-                    name="repeatFrequency"
-                    value={repeatFrequency}
-                    onChange={(e) => setRepeatFrequency(e.target.value)}
-                  >
-                    <MenuItem value="daily">Daily</MenuItem>
-                    <MenuItem value="weekly">Weekly</MenuItem>
-                    <MenuItem value="monthly">Monthly</MenuItem>
-                    <MenuItem value="quarterly">Quarterly</MenuItem>
-                    <MenuItem value="yearly">Yearly</MenuItem>
-                  </Select>
-                </FormControlStyled>
-              </Grid>
+              <div className="taskassign-grid-item">
+                <label htmlFor="repeatFrequency" className="taskassign-label">Repeat Frequency</label>
+                <select
+                  id="repeatFrequency"
+                  name="repeatFrequency"
+                  className="taskassign-select"
+                  value={repeatFrequency}
+                  onChange={(e) => setRepeatFrequency(e.target.value)}
+                >
+                  <option value="daily">Daily</option>
+                  <option value="weekly">Weekly</option>
+                  <option value="monthly">Monthly</option>
+                  <option value="quarterly">Quarterly</option>
+                  <option value="yearly">Yearly</option>
+                </select>
+              </div>
             )}
-            <Grid item xs={12}>
-              <Typography variant="h6">Priority</Typography>
-              <ToggleButtonGroup
-                value={priority}
-                exclusive
-                onChange={(e, newPriority) => setPriority(newPriority)}
-                aria-label="priority"
-              >
-                <ToggleButton value="high" aria-label="high">
+            <div className="taskassign-grid-item">
+              <h6 className="taskassign-subtitle">Priority</h6>
+              <div className="taskassign-toggle-group">
+                <button
+                  type="button"
+                  className={`taskassign-toggle-button ${priority === 'high' ? 'active' : ''}`}
+                  onClick={() => setPriority('high')}
+                >
                   High
-                </ToggleButton>
-                <ToggleButton value="medium" aria-label="medium">
+                </button>
+                <button
+                  type="button"
+                  className={`taskassign-toggle-button ${priority === 'medium' ? 'active' : ''}`}
+                  onClick={() => setPriority('medium')}
+                >
                   Medium
-                </ToggleButton>
-                <ToggleButton value="low" aria-label="low">
+                </button>
+                <button
+                  type="button"
+                  className={`taskassign-toggle-button ${priority === 'low' ? 'active' : ''}`}
+                  onClick={() => setPriority('low')}
+                >
                   Low
-                </ToggleButton>
-              </ToggleButtonGroup>
-            </Grid>
-            <Grid item xs={12}>
-              <ButtonStyledRightIcon
-                variant="contained"
-                component="label"
-                endIcon={<AttachFileIcon />}
-              >
+                </button>
+              </div>
+            </div>
+            <div className="taskassign-grid-item">
+              <label className="taskassign-button taskassign-upload-button">
                 Upload Files
-              <input
-                type="file"
-                hidden
-                multiple
-                onChange={handleFileChange}
-              />
-            </ButtonStyledRightIcon>
-            {attachments && attachments.length > 0 && (
-              <Grid item xs={12}>
-                {attachments.map((file, index) => (
-                  <Typography key={index} variant="body1">
-                    {file.name}
-                    <IconButton onClick={() => handleDeleteAttachment(index)}>
-                      <DeleteIcon />
-                    </IconButton>
-                  </Typography>
-                ))}
-              </Grid>
-            )}
-            </Grid>
-            <Grid item xs={12}>
+                <input
+                  type="file"
+                  hidden
+                  multiple
+                  onChange={handleFileChange}
+                />
+              </label>
+              {attachments && attachments.length > 0 && (
+                <div className="taskassign-attachments">
+                  {attachments.map((file, index) => (
+                    <div key={index} className="taskassign-attachment">
+                      {file.name}
+                      <button type="button" className="taskassign-delete-button" onClick={() => handleDeleteAttachment(index)}>
+                        Delete
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+            <div className="taskassign-grid-item">
               {recording ? (
-                <ButtonStyledRightIcon
-                  variant="contained"
-                  color="secondary"
-                  endIcon={<StopIcon />}
+                <button
+                  type="button"
+                  className="taskassign-button taskassign-stop-button"
                   onClick={handleStopRecording}
                 >
                   Recording... {formatTime(recordingTime)}
-                </ButtonStyledRightIcon>
+                </button>
               ) : (
-                <ButtonStyledRightIcon
-                  variant="contained"
-                  color="primary"
-                  endIcon={<MicIcon />}
+                <button
+                  type="button"
+                  className="taskassign-button taskassign-record-button"
                   onClick={handleRecordVoiceNote}
                 >
                   Record Voice Note
-                </ButtonStyledRightIcon>
+                </button>
               )}
-            </Grid>
+            </div>
             {voiceNotes && voiceNotes.length > 0 && (
-              <Grid item xs={12}>
+              <div className="taskassign-grid-item">
                 {voiceNotes.map((duration, index) => (
-                  <Typography key={index} variant="body1">
+                  <div key={index} className="taskassign-voice-note">
                     Voice Note Duration: {formatTime(duration)}
-                    <IconButton onClick={() => handleDeleteVoiceNote(index)}>
-                      <DeleteIcon />
-                    </IconButton>
-                  </Typography>
+                    <button type="button" className="taskassign-delete-button" onClick={() => handleDeleteVoiceNote(index)}>
+                      Delete
+                    </button>
+                  </div>
                 ))}
-              </Grid>
+              </div>
             )}
-            <Grid item xs={12}>
-              <ButtonStyled
-                variant="contained"
-                color="primary"
-                startIcon={<AssignmentIcon />}
+            <div className="taskassign-grid-item">
+              <button
+                type="button"
+                className="taskassign-button taskassign-assign-button"
                 onClick={handleAssignTask}
               >
                 Assign Task
-              </ButtonStyled>
-            </Grid>
-          </Grid>
+              </button>
+            </div>
+          </div>
         </form>
-      </PaperStyled>
-      <Snackbar
-        open={openSnackbar}
-        autoHideDuration={6000}
-        onClose={handleCloseSnackbar}
-      >
-        <Alert onClose={handleCloseSnackbar} severity="success" sx={{ width: '100%' }}>
-          Task Delegated
-        </Alert>
-      </Snackbar>
-    </Root>
+        {openSnackbar && (
+          <div className="taskassign-snackbar">
+            <div className="taskassign-alert">
+              Task Delegated
+              <button type="button" className="taskassign-close-button" onClick={handleCloseSnackbar}>
+                Close
+              </button>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
   );
 };
 
