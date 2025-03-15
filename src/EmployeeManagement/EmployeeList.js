@@ -1,33 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import CustomTable from '../Components/CustomTable';
-import { TextField, MenuItem, FormControl, InputLabel, Select, Button, Typography, Paper, Grid } from '@mui/material';
-import { styled } from '@mui/material/styles';
-
-const Root = styled('div')(({ theme }) => ({
-  flexGrow: 1,
-  padding: theme.spacing(3),
-}));
-
-const FormControlStyled = styled(FormControl)(({ theme }) => ({
-  margin: theme.spacing(1),
-  minWidth: 100,
-}));
-
-const FormControlStyledWide = styled(FormControl)(({ theme }) => ({
-  margin: theme.spacing(1),
-  minWidth: 300,
-}));
-
-const PaperStyled = styled(Paper)(({ theme }) => ({
-  padding: theme.spacing(3),
-  textAlign: 'center',
-  color: theme.palette.text.secondary,
-}));
-
-const ButtonStyled = styled(Button)(({ theme }) => ({
-  marginTop: theme.spacing(2),
-}));
+import './EmployeeList.css';
 
 const employees = [
   { id: 'E001', name: 'Aagam Sheth', salary: 29254, department: 'HR', doj: '2020-01-15', status: 'Active' },
@@ -80,23 +54,18 @@ function EmployeeList() {
     ...employee,
     employeeId: `E${String(index + 1).padStart(3, '0')}`,
     actions: (
-      <FormControl sx={{ minWidth: 150 }}>
-        <InputLabel id={`actions-label-${index}`}>Actions</InputLabel>
-        <Select
-          labelId={`actions-label-${index}`}
-          id={`actions-${index}`}
-          onChange={(e) => {
-            if (e.target.value === 'update') {
-              navigate('/update-employee', { state: { employees, selectedEmployeeId: employee.id } });
-            }
-          }}
-          sx={{ minWidth: 150 }}
-        >
-          <MenuItem value="view">View</MenuItem>
-          <MenuItem value="update">Update</MenuItem>
-          <MenuItem value="delete">Delete</MenuItem>
-        </Select>
-      </FormControl>
+      <select
+        className="employeelist-select"
+        onChange={(e) => {
+          if (e.target.value === 'update') {
+            navigate('/update-employee', { state: { employees, selectedEmployeeId: employee.id } });
+          }
+        }}
+      >
+        <option value="view">View</option>
+        <option value="update">Update</option>
+        <option value="delete">Delete</option>
+      </select>
     ),
   }));
 
@@ -110,77 +79,71 @@ function EmployeeList() {
   });
 
   return (
-    <Root>
-      <PaperStyled>
-        <Typography variant="h4" gutterBottom>
-          Employee List
-        </Typography>
-        <div className="filters">
-          <Grid container spacing={3}>
-            <Grid item xs={12}>
-              <TextField
-                label="Search by Name or Employee ID"
-                variant="outlined"
+    <div className="employeelist-root">
+      <div className="employeelist-paper">
+        <h4 className="employeelist-title">Employee List</h4>
+        <div className="employeelist-filters">
+          <div className="employeelist-grid">
+            <div className="employeelist-grid-item">
+              <label htmlFor="search" className="employeelist-label">Search by Name or Employee ID</label>
+              <input
+                type="text"
+                id="search"
+                className="employeelist-input"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                fullWidth
               />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <FormControlStyled fullWidth>
-                <InputLabel id="department-filter-label">Department</InputLabel>
-                <Select
-                  labelId="department-filter-label"
-                  id="department-filter"
-                  value={departmentFilter}
-                  onChange={(e) => setDepartmentFilter(e.target.value)}
-                >
-                  <MenuItem value="">All</MenuItem>
-                  <MenuItem value="HR">HR</MenuItem>
-                  <MenuItem value="Recruitment and talent acquisition">Recruitment and talent acquisition</MenuItem>
-                  <MenuItem value="Payroll and compensation">Payroll and compensation</MenuItem>
-                  <MenuItem value="Learning and development">Learning and development</MenuItem>
-                  <MenuItem value="Employee relations">Employee relations</MenuItem>
-                  <MenuItem value="Legal and compliance">Legal and compliance</MenuItem>
-                  <MenuItem value="Operations and administration">Operations and administration</MenuItem>
-                  <MenuItem value="Sales and business development">Sales and business development</MenuItem>
-                  <MenuItem value="Marketing and branding">Marketing and branding</MenuItem>
-                  <MenuItem value="IT and technical support">IT and technical support</MenuItem>
-                  <MenuItem value="Finance and accounting">Finance and accounting</MenuItem>
-                  <MenuItem value="Project management">Project management</MenuItem>
-                  <MenuItem value="Workforce planning">Workforce planning</MenuItem>
-                  <MenuItem value="Data analytics">Data analytics</MenuItem>
-                  <MenuItem value="Admin">Admin</MenuItem>
-                  <MenuItem value="Franchise">Franchise</MenuItem>
-                </Select>
-              </FormControlStyled>
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <FormControlStyledWide fullWidth>
-                <InputLabel id="status-filter-label">Status</InputLabel>
-                <Select
-                  labelId="status-filter-label"
-                  id="status-filter"
-                  value={statusFilter}
-                  onChange={(e) => setStatusFilter(e.target.value)}
-                  sx={{ minWidth: 300 }} 
-                >
-                  <MenuItem value="">All</MenuItem>
-                  <MenuItem value="Active">Active</MenuItem>
-                  <MenuItem value="Inactive">Inactive</MenuItem>
-                </Select>
-              </FormControlStyledWide>
-            </Grid>
-            <Grid item xs={12}>
-              <ButtonStyled variant="contained" color="primary" onClick={() => setSearchTerm('')}>
+            </div>
+            <div className="employeelist-grid-item">
+              <label htmlFor="department-filter" className="employeelist-label">Department</label>
+              <select
+                id="department-filter"
+                className="employeelist-select"
+                value={departmentFilter}
+                onChange={(e) => setDepartmentFilter(e.target.value)}
+              >
+                <option value="">All</option>
+                <option value="HR">HR</option>
+                <option value="Recruitment and talent acquisition">Recruitment and talent acquisition</option>
+                <option value="Payroll and compensation">Payroll and compensation</option>
+                <option value="Learning and development">Learning and development</option>
+                <option value="Employee relations">Employee relations</option>
+                <option value="Legal and compliance">Legal and compliance</option>
+                <option value="Operations and administration">Operations and administration</option>
+                <option value="Sales and business development">Sales and business development</option>
+                <option value="Marketing and branding">Marketing and branding</option>
+                <option value="IT and technical support">IT and technical support</option>
+                <option value="Finance and accounting">Finance and accounting</option>
+                <option value="Project management">Project management</option>
+                <option value="Workforce planning">Workforce planning</option>
+                <option value="Data analytics">Data analytics</option>
+                <option value="Admin">Admin</option>
+                <option value="Franchise">Franchise</option>
+              </select>
+            </div>
+            <div className="employeelist-grid-item">
+              <label htmlFor="status-filter" className="employeelist-label">Status</label>
+              <select
+                id="status-filter"
+                className="employeelist-select"
+                value={statusFilter}
+                onChange={(e) => setStatusFilter(e.target.value)}
+              >
+                <option value="">All</option>
+                <option value="Active">Active</option>
+                <option value="Inactive">Inactive</option>
+              </select>
+            </div>
+            <div className="employeelist-grid-item">
+              <button className="employeelist-button" onClick={() => setSearchTerm('')}>
                 Clear Filters
-              </ButtonStyled>
-            </Grid>
-          </Grid>
+              </button>
+            </div>
+          </div>
         </div>
         <CustomTable columns={columns} data={filteredData} />
-      </PaperStyled>
-    </Root>
+      </div>
+    </div>
   );
 }
 

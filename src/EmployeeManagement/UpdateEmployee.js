@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { TextField, Button, MenuItem, FormControl, InputLabel, Select, Grid, Typography, Paper } from '@mui/material';
-import { styled } from '@mui/material/styles';
+import './UpdateEmployee.css';
 
 const employees = [
   { id: 'E001', name: 'Aagam Sheth', salary: 29254, department: 'HR', doj: '2020-01-15', status: 'Active' },
@@ -53,26 +52,6 @@ const departmentOptions = [
   'Franchise',
 ];
 
-const Root = styled('div')(({ theme }) => ({
-  flexGrow: 1,
-  padding: theme.spacing(3),
-}));
-
-const FormControlStyled = styled(FormControl)(({ theme }) => ({
-  margin: theme.spacing(1),
-  minWidth: 120,
-}));
-
-const PaperStyled = styled(Paper)(({ theme }) => ({
-  padding: theme.spacing(3),
-  textAlign: 'center',
-  color: theme.palette.text.secondary,
-}));
-
-const ButtonStyled = styled(Button)(({ theme }) => ({
-  marginTop: theme.spacing(2),
-}));
-
 function UpdateEmployee() {
   const [selectedEmployeeId, setSelectedEmployeeId] = useState('');
   const [employee, setEmployee] = useState({
@@ -116,222 +95,216 @@ function UpdateEmployee() {
   };
 
   return (
-    <Root>
-      <PaperStyled>
-        <Typography variant="h4" gutterBottom>
-          Update Employee
-        </Typography>
-        <FormControlStyled fullWidth>
-          <InputLabel id="employee-select-label">Select Employee</InputLabel>
-          <Select
-            labelId="employee-select-label"
+    <div className="updateemployee-root">
+      <div className="updateemployee-paper">
+        <h4 className="updateemployee-title">Update Employee</h4>
+        <div className="updateemployee-form-control">
+          <label htmlFor="employee-select" className="updateemployee-label">Select Employee</label>
+          <select
             id="employee-select"
+            className="updateemployee-select"
             value={selectedEmployeeId}
             onChange={(e) => setSelectedEmployeeId(e.target.value)}
           >
+            <option value="">Select Employee</option>
             {employees.map((emp) => (
-              <MenuItem key={emp.id} value={emp.id}>
+              <option key={emp.id} value={emp.id}>
                 {emp.name}
-              </MenuItem>
+              </option>
             ))}
-          </Select>
-        </FormControlStyled>
+          </select>
+        </div>
         <form noValidate autoComplete="off" onSubmit={handleSubmit}>
-          <Grid container spacing={3}>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                required
+          <div className="updateemployee-grid">
+            <div className="updateemployee-grid-item">
+              <label htmlFor="employeeId" className="updateemployee-label">Employee ID</label>
+              <input
+                type="text"
                 id="employeeId"
                 name="employeeId"
-                label="Employee ID"
+                className="updateemployee-input"
                 value={employee.employeeId}
                 onChange={handleChange}
-                fullWidth
                 disabled
-              />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
                 required
+              />
+            </div>
+            <div className="updateemployee-grid-item">
+              <label htmlFor="firstName" className="updateemployee-label">First Name</label>
+              <input
+                type="text"
                 id="firstName"
                 name="firstName"
-                label="First Name"
+                className="updateemployee-input"
                 value={employee.firstName}
                 onChange={handleChange}
-                fullWidth
-              />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
                 required
+              />
+            </div>
+            <div className="updateemployee-grid-item">
+              <label htmlFor="lastName" className="updateemployee-label">Last Name</label>
+              <input
+                type="text"
                 id="lastName"
                 name="lastName"
-                label="Last Name"
+                className="updateemployee-input"
                 value={employee.lastName}
                 onChange={handleChange}
-                fullWidth
-              />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
                 required
+              />
+            </div>
+            <div className="updateemployee-grid-item">
+              <label htmlFor="dob" className="updateemployee-label">Date of Birth</label>
+              <input
+                type="date"
                 id="dob"
                 name="dob"
-                label="Date of Birth"
-                type="date"
+                className="updateemployee-input"
                 value={employee.dob}
                 onChange={handleChange}
-                InputLabelProps={{ shrink: true }}
-                fullWidth
-              />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <FormControlStyled fullWidth>
-                <InputLabel id="gender-label">Gender</InputLabel>
-                <Select
-                  labelId="gender-label"
-                  id="gender"
-                  name="gender"
-                  value={employee.gender}
-                  onChange={handleChange}
-                >
-                  <MenuItem value="male">Male</MenuItem>
-                  <MenuItem value="female">Female</MenuItem>
-                  <MenuItem value="other">Other</MenuItem>
-                </Select>
-              </FormControlStyled>
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
                 required
+              />
+            </div>
+            <div className="updateemployee-grid-item">
+              <label htmlFor="gender" className="updateemployee-label">Gender</label>
+              <select
+                id="gender"
+                name="gender"
+                className="updateemployee-select"
+                value={employee.gender}
+                onChange={handleChange}
+                required
+              >
+                <option value="">Select Gender</option>
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+                <option value="other">Other</option>
+              </select>
+            </div>
+            <div className="updateemployee-grid-item">
+              <label htmlFor="contact" className="updateemployee-label">Contact Information</label>
+              <input
+                type="text"
                 id="contact"
                 name="contact"
-                label="Contact Information"
+                className="updateemployee-input"
                 value={employee.contact}
                 onChange={handleChange}
-                fullWidth
-              />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
                 required
+              />
+            </div>
+            <div className="updateemployee-grid-item">
+              <label htmlFor="department" className="updateemployee-label">Department</label>
+              <select
                 id="department"
                 name="department"
-                label="Department"
+                className="updateemployee-select"
                 value={employee.department}
                 onChange={handleChange}
-                fullWidth
-              />
-            </Grid><Grid item xs={12} sm={6}>
-              <FormControlStyled fullWidth>
-                <InputLabel id="department-label">Department</InputLabel>
-                <Select
-                  labelId="department-label"
-                  id="department"
-                  name="department"
-                  value={employee.department}
-                  onChange={handleChange}
-                >
-                  {departmentOptions.map((department) => (
-                    <MenuItem key={department} value={department}>
-                      {department}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControlStyled>
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
                 required
+              >
+                <option value="">Select Department</option>
+                {departmentOptions.map((department) => (
+                  <option key={department} value={department}>
+                    {department}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className="updateemployee-grid-item">
+              <label htmlFor="doj" className="updateemployee-label">Date of Joining</label>
+              <input
+                type="date"
                 id="doj"
                 name="doj"
-                label="Date of Joining"
-                type="date"
+                className="updateemployee-input"
                 value={employee.doj}
                 onChange={handleChange}
-                InputLabelProps={{ shrink: true }}
-                fullWidth
-              />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
                 required
+              />
+            </div>
+            <div className="updateemployee-grid-item">
+              <label htmlFor="salary" className="updateemployee-label">Salary Details</label>
+              <input
+                type="text"
                 id="salary"
                 name="salary"
-                label="Salary Details"
+                className="updateemployee-input"
                 value={employee.salary}
                 onChange={handleChange}
-                fullWidth
-              />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
                 required
+              />
+            </div>
+            <div className="updateemployee-grid-item">
+              <label htmlFor="bankAccount" className="updateemployee-label">Bank Account Information</label>
+              <input
+                type="text"
                 id="bankAccount"
                 name="bankAccount"
-                label="Bank Account Information"
+                className="updateemployee-input"
                 value={employee.bankAccount}
                 onChange={handleChange}
-                fullWidth
-              />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
                 required
+              />
+            </div>
+            <div className="updateemployee-grid-item">
+              <label htmlFor="emergencyContact" className="updateemployee-label">Emergency Contacts</label>
+              <input
+                type="text"
                 id="emergencyContact"
                 name="emergencyContact"
-                label="Emergency Contacts"
+                className="updateemployee-input"
                 value={employee.emergencyContact}
                 onChange={handleChange}
-                fullWidth
-              />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
                 required
+              />
+            </div>
+            <div className="updateemployee-grid-item">
+              <label htmlFor="address" className="updateemployee-label">Address</label>
+              <input
+                type="text"
                 id="address"
                 name="address"
-                label="Address"
+                className="updateemployee-input"
                 value={employee.address}
                 onChange={handleChange}
-                fullWidth
-              />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
                 required
+              />
+            </div>
+            <div className="updateemployee-grid-item">
+              <label htmlFor="documents" className="updateemployee-label">Documents (ID Proofs, Address Proofs)</label>
+              <input
+                type="text"
                 id="documents"
                 name="documents"
-                label="Documents (ID Proofs, Address Proofs)"
+                className="updateemployee-input"
                 value={employee.documents}
                 onChange={handleChange}
-                fullWidth
+                required
               />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <FormControlStyled fullWidth>
-                <InputLabel id="status-label">Status</InputLabel>
-                <Select
-                  labelId="status-label"
-                  id="status"
-                  name="status"
-                  value={employee.status}
-                  onChange={handleChange}
-                >
-                  <MenuItem value="active">Active</MenuItem>
-                  <MenuItem value="inactive">Inactive</MenuItem>
-                </Select>
-              </FormControlStyled>
-            </Grid>
-            <Grid item xs={12}>
-              <ButtonStyled variant="contained" color="primary" type="submit">
-                Update
-              </ButtonStyled>
-            </Grid>
-          </Grid>
+            </div>
+            <div className="updateemployee-grid-item">
+              <label htmlFor="status" className="updateemployee-label">Status</label>
+              <select
+                id="status"
+                name="status"
+                className="updateemployee-select"
+                value={employee.status}
+                onChange={handleChange}
+                required
+              >
+                <option value="">Select Status</option>
+                <option value="active">Active</option>
+                <option value="inactive">Inactive</option>
+              </select>
+            </div>
+            <div className="updateemployee-grid-item">
+              <button type="submit" className="updateemployee-button">Update</button>
+            </div>
+          </div>
         </form>
-      </PaperStyled>
-    </Root>
+      </div>
+    </div>
   );
 }
 

@@ -1,26 +1,5 @@
 import React, { useState } from 'react';
-import { FormControl, InputLabel, Select, MenuItem, Checkbox, Button, Grid, Typography, Paper, FormGroup, FormControlLabel } from '@mui/material';
-import { styled } from '@mui/material/styles';
-
-const Root = styled('div')(({ theme }) => ({
-  flexGrow: 1,
-  padding: theme.spacing(3),
-}));
-
-const FormControlStyled = styled(FormControl)(({ theme }) => ({
-  margin: theme.spacing(1),
-  minWidth: 120,
-}));
-
-const PaperStyled = styled(Paper)(({ theme }) => ({
-  padding: theme.spacing(3),
-  textAlign: 'center',
-  color: theme.palette.text.secondary,
-}));
-
-const ButtonStyled = styled(Button)(({ theme }) => ({
-  marginTop: theme.spacing(2),
-}));
+import './StatutoryCompliance.css';
 
 const StatutoryCompliance = () => {
   const [month, setMonth] = useState('');
@@ -55,99 +34,87 @@ const StatutoryCompliance = () => {
   };
 
   return (
-    <Root>
-      <PaperStyled>
-        <Typography variant="h4" gutterBottom>
-          Statutory Compliance
-        </Typography>
+    <div className="statutorycompliance-root">
+      <div className="statutorycompliance-paper">
+        <h4 className="statutorycompliance-title">Statutory Compliance</h4>
         <form noValidate autoComplete="off">
-          <Grid container spacing={3}>
-            <Grid item xs={12}>
-              <Typography variant="h6" gutterBottom>
-                Select Compliance Period
-              </Typography>
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <FormControlStyled fullWidth>
-                <InputLabel>Month</InputLabel>
-                <Select
-                  value={month}
-                  onChange={(e) => setMonth(e.target.value)}
-                >
-                  {months.map((month) => (
-                    <MenuItem key={month} value={month}>
-                      {month}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControlStyled>
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <FormControlStyled fullWidth>
-                <InputLabel>Year</InputLabel>
-                <Select
-                  value={year}
-                  onChange={(e) => setYear(e.target.value)}
-                >
-                  {years.map((year) => (
-                    <MenuItem key={year} value={year}>
-                      {year}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControlStyled>
-            </Grid>
-            <Grid item xs={12}>
-              <Typography variant="h6" gutterBottom>
-                Select Compliance Report Type
-              </Typography>
-            </Grid>
-            <Grid item xs={12}>
-              <FormControlStyled fullWidth>
-                <FormGroup row>
-                  {reportOptions.map((report) => (
-                    <FormControlLabel
-                      key={report}
-                      control={
-                        <Checkbox
-                          checked={reportTypes.includes(report)}
-                          onChange={handleReportTypeChange}
-                          value={report}
-                        />
-                      }
-                      label={report}
+          <div className="statutorycompliance-grid">
+            <div className="statutorycompliance-grid-item">
+              <h6>Select Compliance Period</h6>
+            </div>
+            <div className="statutorycompliance-grid-item">
+              <label htmlFor="month" className="statutorycompliance-label">Month</label>
+              <select
+                id="month"
+                className="statutorycompliance-select"
+                value={month}
+                onChange={(e) => setMonth(e.target.value)}
+              >
+                {months.map((month) => (
+                  <option key={month} value={month}>
+                    {month}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className="statutorycompliance-grid-item">
+              <label htmlFor="year" className="statutorycompliance-label">Year</label>
+              <select
+                id="year"
+                className="statutorycompliance-select"
+                value={year}
+                onChange={(e) => setYear(e.target.value)}
+              >
+                {years.map((year) => (
+                  <option key={year} value={year}>
+                    {year}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className="statutorycompliance-grid-item">
+              <h6>Select Compliance Report Type</h6>
+            </div>
+            <div className="statutorycompliance-grid-item">
+              <div className="statutorycompliance-checkbox-group">
+                {reportOptions.map((report) => (
+                  <label key={report} className="statutorycompliance-checkbox-label">
+                    <input
+                      type="checkbox"
+                      checked={reportTypes.includes(report)}
+                      onChange={handleReportTypeChange}
+                      value={report}
                     />
-                  ))}
-                </FormGroup>
-              </FormControlStyled>
-            </Grid>
-            <Grid item xs={12}>
-              <Typography variant="h6" gutterBottom>
-                Export Compliance Report As:
-              </Typography>
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <FormControlStyled fullWidth>
-                <InputLabel>Export Format</InputLabel>
-                <Select
-                  value={exportFormat}
-                  onChange={(e) => setExportFormat(e.target.value)}
-                >
-                  <MenuItem value="pdf">PDF</MenuItem>
-                  <MenuItem value="excel">Excel</MenuItem>
-                  <MenuItem value="csv">CSV</MenuItem>
-                </Select>
-              </FormControlStyled>
-            </Grid>
-            <Grid item xs={12}>
-              <ButtonStyled variant="contained" color="primary" onClick={handleGenerateReport}>
+                    {report}
+                  </label>
+                ))}
+              </div>
+            </div>
+            <div className="statutorycompliance-grid-item">
+              <h6>Export Compliance Report As:</h6>
+            </div>
+            <div className="statutorycompliance-grid-item">
+              <label htmlFor="exportFormat" className="statutorycompliance-label">Export Format</label>
+              <select
+                id="exportFormat"
+                className="statutorycompliance-select"
+                value={exportFormat}
+                onChange={(e) => setExportFormat(e.target.value)}
+              >
+                <option value="pdf">PDF</option>
+                <option value="excel">Excel</option>
+                <option value="csv">CSV</option>
+              </select>
+            </div>
+            <div className="statutorycompliance-grid-item">
+              <button type="button" className="statutorycompliance-button" onClick={handleGenerateReport}>
                 Generate Compliance Report
-              </ButtonStyled>
-            </Grid>
-          </Grid>
+              </button>
+            </div>
+          </div>
         </form>
-      </PaperStyled>
-    </Root>
+      </div>
+    </div>
   );
 };
 

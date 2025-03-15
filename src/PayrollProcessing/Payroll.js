@@ -1,173 +1,164 @@
-import React from 'react';
-import CustomTable from '../Components/CustomTable';
-import { Typography, Paper } from '@mui/material';
-import { styled } from '@mui/material/styles';
+import React, { useState } from 'react';
+import './Payroll.css';
 
-const Root = styled('div')(({ theme }) => ({
-  flexGrow: 1,
-  padding: theme.spacing(3),
-}));
+const GeneratePayroll = () => {
+  const [month, setMonth] = useState('');
+  const [year, setYear] = useState('');
+  const [employeeSelection, setEmployeeSelection] = useState('all');
+  const [specificEmployee, setSpecificEmployee] = useState('');
+  const [exportFormat, setExportFormat] = useState('');
 
-const PaperStyled = styled(Paper)(({ theme }) => ({
-  padding: theme.spacing(3),
-  textAlign: 'center',
-  color: theme.palette.text.secondary,
-}));
-
-function Payroll() {
-  const payrolls = [
-    { name: 'Aagam Sheth', salary: 29254 },
-    { name: 'Avadai Marthuvar', salary: 29254 },
-    { name: 'Hrutika Mohal', salary: 22570 },
-    { name: 'Jahnvi Thakker', salary: 50000 },
-    { name: 'Joyeeta Khaskel', salary: 68550 },
-    { name: 'Komal Bhanushali', salary: 68550 },
-    { name: 'Preshita Rane', salary: 51950 },
-    { name: 'Priyanka Panjwani', salary: 51950 },
-    { name: 'Rajalaxmi Das', salary: 58786 },
-    { name: 'Rashesh Doshi', salary: 150000 },
-    { name: 'Rushali Rajgor', salary: 17000 },
-    { name: 'Snehal kadu', salary: 51950 },
-    { name: 'Surbhi Jain', salary: 68550 },
-    { name: 'Vaishnavi Bhagat', salary: 43160 },
-    { name: 'Vedika Tolani', salary: 34254 },
-    { name: 'Jagruti Doshi', salary: 40000 },
-    { name: 'Kajal Khamkar', salary: 18595 },
-    { name: 'Nishi Doshi', salary: 22500 },
-    { name: 'Deepti Singh', salary: 21870 },
-    { name: 'Bankim Doshi', salary: 150000 },
-    { name: 'Nita Doshi', salary: 40000 },
-    { name: 'Pragya Doshi', salary: 50000 },
-    { name: 'Chaitali Doshi', salary: 50000 },
-    { name: 'Preeti Doshi', salary: 50000 },
-    { name: 'Kinjal Patel', salary: 40000 },
-    { name: 'Minal Sanghvi', salary: 100000 },
-    { name: 'Jigna Sanghvi', salary: 100000 },
-    { name: 'SAUMYA KIRIT GALA', salary: 100000 },
-    { name: 'Shreya Santosh Talashilkar', salary: 29454 },
+  const months = [
+    'January', 'February', 'March', 'April', 'May', 'June',
+    'July', 'August', 'September', 'October', 'November', 'December'
   ];
 
-  const columns = [
-    { header: 'Sr. No', accessor: 'id' },
-    { header: 'Employee Name', accessor: 'name' },
-    { header: 'Days in month', accessor: 'daysInMonth' },
-    { header: 'Paid Days', accessor: 'paidDays' },
-    { header: 'Fixed GROSS Salary (NEW)', accessor: 'fixedGrossSalary' },
-    { header: 'Basic + DA', accessor: 'basicDA' },
-    { header: 'HRA', accessor: 'hra' },
-    { header: 'Conveyance', accessor: 'conveyance' },
-    { header: 'Medical Allow', accessor: 'medicalAllow' },
-    { header: 'Other ALLOWANCE', accessor: 'otherAllowance' },
-    { header: 'Gross', accessor: 'gross' },
-    { header: 'Earn basic', accessor: 'earnBasic' },
-    { header: 'Earn HRA', accessor: 'earnHRA' },
-    { header: 'Conveyance', accessor: 'earnConveyance' },
-    { header: 'Medical Allow', accessor: 'earnMedicalAllow' },
-    { header: 'Incentive', accessor: 'incentive' },
-    { header: 'Earn OTHER Allo', accessor: 'earnOtherAllo' },
-    { header: 'Earn Gross', accessor: 'earnGross' },
-    { header: 'PF WAGES', accessor: 'pfWages' },
-    { header: 'PF', accessor: 'pf' },
-    { header: 'ESIC', accessor: 'esic' },
-    { header: 'PT', accessor: 'pt' },
-    { header: 'LWF', accessor: 'lwf' },
-    { header: 'Advance', accessor: 'advance' },
-    { header: 'Total Deduction', accessor: 'totalDeduction' },
-    { header: 'Net Payable', accessor: 'netPayable' },
-    { header: 'Graduity', accessor: 'graduity' },
-    { header: 'EMPYER PF', accessor: 'employerPF' },
-    { header: 'EMPYER ESIC', accessor: 'employerESIC' },
-    { header: 'Bonus', accessor: 'bonus' },
-    { header: 'EMPLOYER LWF', accessor: 'employerLWF' },
-    { header: 'CTC', accessor: 'ctc' },
-    { header: 'Remark', accessor: 'remark' },
-    { header: 'Remark2', accessor: 'remark2' },
+  const years = Array.from(new Array(26), (val, index) => index + 2000);
+
+  const employeeOptions = [
+    { id: 'E001', name: 'Aagam Sheth' },
+    { id: 'E002', name: 'Avadai Marthuvar' },
+    { id: 'E003', name: 'Hrutika Mohal' },
+    { id: 'E004', name: 'Jahnvi Thakker' },
+    { id: 'E005', name: 'Joyeeta Khaskel' },
+    { id: 'E006', name: 'Komal Bhanushali' },
+    { id: 'E007', name: 'Preshita Rane' },
+    { id: 'E008', name: 'Priyanka Panjwani' },
+    { id: 'E009', name: 'Rajalaxmi Das' },
+    { id: 'E010', name: 'Rashesh Doshi' },
+    { id: 'E011', name: 'Rushali Rajgor' },
+    { id: 'E012', name: 'Snehal kadu' },
+    { id: 'E013', name: 'Surbhi Jain' },
+    { id: 'E014', name: 'Vaishnavi Bhagat' },
+    { id: 'E015', name: 'Vedika Tolani' },
+    { id: 'E016', name: 'Jagruti Doshi' },
+    { id: 'E017', name: 'Kajal Khamkar' },
+    { id: 'E018', name: 'Nishi Doshi' },
+    { id: 'E019', name: 'Deepti Singh' },
+    { id: 'E020', name: 'Bankim Doshi' },
+    { id: 'E021', name: 'Nita Doshi' },
+    { id: 'E022', name: 'Pragya Doshi' },
+    { id: 'E023', name: 'Chaitali Doshi' },
+    { id: 'E024', name: 'Preeti Doshi' },
+    { id: 'E025', name: 'Kinjal Patel' },
+    { id: 'E026', name: 'Minal Sanghvi' },
+    { id: 'E027', name: 'Jigna Sanghvi' },
+    { id: 'E028', name: 'SAUMYA KIRIT GALA' },
+    { id: 'E029', name: 'Shreya Santosh Talashilkar' },
   ];
 
-  const generatePayrollData = (payrolls) => {
-    return payrolls.map((payroll, index) => {
-      const daysInMonth = 31;
-      const paidDays = 31;
-      const fixedGrossSalary = payroll.salary;
-      const basicDA = Math.round(payroll.salary * 0.5);
-      const hra = Math.round(basicDA * 0.5);
-      const conveyance = 1200;
-      const medicalAllow = 1000;
-      const otherAllowance = payroll.salary - hra - basicDA - conveyance - medicalAllow;
-      const gross = basicDA + hra + conveyance + medicalAllow + otherAllowance;
-      const earnBasic = Math.round((basicDA / daysInMonth) * paidDays);
-      const earnHRA = Math.round((hra / daysInMonth) * paidDays);
-      const earnConveyance = Math.round((conveyance / daysInMonth) * paidDays);
-      const earnMedicalAllow = Math.round((medicalAllow / daysInMonth) * paidDays);
-      const incentive = 0;
-      const earnOtherAllo = Math.round((otherAllowance / daysInMonth) * paidDays);
-      const earnGross = earnBasic + earnHRA + earnConveyance + earnMedicalAllow + earnOtherAllo;
-      const pfWages = earnGross - earnHRA;
-      const pf = Math.round(pfWages >= 15000 ? 1800 : pfWages * 0.12);
-      const esic = Math.ceil(gross >= 21001 ? 0 : earnGross * 0.0075);
-      const pt = 200;
-      const lwf = 25;
-      const advance = 0;
-      const totalDeduction = pf + esic + pt + lwf + advance;
-      const netPayable = earnGross - totalDeduction;
-      const graduity = Math.round(earnBasic * 0.0481) + 1;
-      const employerPF = Math.round(pf);
-      const employerESIC = Math.ceil(gross >= 21001 ? 0 : earnGross * 0.0325);
-      const bonus = Math.round(basicDA * 0.0833);
-      const employerLWF = lwf * 3;
-      const ctc = earnGross + employerPF + employerESIC + graduity + employerLWF;
-
-      return {
-        id: index + 1,
-        name: payroll.name,
-        daysInMonth,
-        paidDays,
-        fixedGrossSalary: `${fixedGrossSalary}`,
-        basicDA: `${basicDA}`,
-        hra: `${hra}`,
-        conveyance: `${conveyance}`,
-        medicalAllow: `${medicalAllow}`,
-        otherAllowance: `${otherAllowance.toFixed(2)}`,
-        gross: `${gross.toFixed(2)}`,
-        earnBasic: `${earnBasic}`,
-        earnHRA: `${earnHRA}`,
-        earnConveyance: `${earnConveyance}`,
-        earnMedicalAllow: `${earnMedicalAllow}`,
-        incentive: `${incentive}`,
-        earnOtherAllo: `${earnOtherAllo}`,
-        earnGross: `${earnGross}`,
-        pfWages: `${pfWages}`,
-        pf: `${pf}`,
-        esic: `${esic}`,
-        pt: `${pt}`,
-        lwf: `${lwf}`,
-        advance: `${advance}`,
-        totalDeduction: `${totalDeduction}`,
-        netPayable: `${netPayable}`,
-        graduity: `${graduity}`,
-        employerPF: `${employerPF}`,
-        employerESIC: `${employerESIC}`,
-        bonus: `${bonus}`,
-        employerLWF: `${employerLWF}`,
-        ctc: `${ctc}`,
-        remark: '-',
-        remark2: '-',
-      };
-    });
+  const handleGenerateReport = () => {
+    // Logic to generate payroll report
+    console.log('Generating payroll report...');
   };
 
-  const payrollData = generatePayrollData(payrolls);
-
   return (
-    <Root>
-      <PaperStyled>
-        <Typography variant="h4" gutterBottom>
-          Payroll Details
-        </Typography>
-        <CustomTable columns={columns} data={payrollData} />
-      </PaperStyled>
-    </Root>
+    <div className="generatepayroll-root">
+      <div className="generatepayroll-paper">
+        <h4 className="generatepayroll-title">Generate Payroll Report</h4>
+        <form noValidate autoComplete="off">
+          <div className="generatepayroll-grid">
+            <div className="generatepayroll-grid-item">
+              <h6>Select Payroll Period</h6>
+            </div>
+            <div className="generatepayroll-grid-item">
+              <label htmlFor="month" className="generatepayroll-label">Month</label>
+              <select
+                id="month"
+                className="generatepayroll-select"
+                value={month}
+                onChange={(e) => setMonth(e.target.value)}
+              >
+                {months.map((month) => (
+                  <option key={month} value={month}>
+                    {month}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className="generatepayroll-grid-item">
+              <label htmlFor="year" className="generatepayroll-label">Year</label>
+              <select
+                id="year"
+                className="generatepayroll-select"
+                value={year}
+                onChange={(e) => setYear(e.target.value)}
+              >
+                {years.map((year) => (
+                  <option key={year} value={year}>
+                    {year}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className="generatepayroll-grid-item">
+              <h6>Employee Selection</h6>
+            </div>
+            <div className="generatepayroll-grid-item">
+              <div className="generatepayroll-radio-group">
+                <label className="generatepayroll-radio-label">
+                  <input
+                    type="radio"
+                    value="all"
+                    checked={employeeSelection === 'all'}
+                    onChange={(event) => setEmployeeSelection(event.target.value)}
+                  />
+                  All Employees
+                </label>
+                <label className="generatepayroll-radio-label">
+                  <input
+                    type="radio"
+                    value="specific"
+                    checked={employeeSelection === 'specific'}
+                    onChange={(event) => setEmployeeSelection(event.target.value)}
+                  />
+                  Specific Employees
+                </label>
+              </div>
+            </div>
+            {employeeSelection === 'specific' && (
+              <div className="generatepayroll-grid-item">
+                <label htmlFor="specificEmployee" className="generatepayroll-label">Specific Employee</label>
+                <select
+                  id="specificEmployee"
+                  className="generatepayroll-select"
+                  value={specificEmployee}
+                  onChange={(event) => setSpecificEmployee(event.target.value)}
+                >
+                  {employeeOptions.map((employee) => (
+                    <option key={employee.id} value={employee.name}>
+                      {employee.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            )}
+            <div className="generatepayroll-grid-item">
+              <h6>Export Payroll Report As:</h6>
+            </div>
+            <div className="generatepayroll-grid-item">
+              <label htmlFor="exportFormat" className="generatepayroll-label">Export Format</label>
+              <select
+                id="exportFormat"
+                className="generatepayroll-select"
+                value={exportFormat}
+                onChange={(e) => setExportFormat(e.target.value)}
+              >
+                <option value="pdf">PDF</option>
+                <option value="excel">Excel</option>
+                <option value="csv">CSV</option>
+              </select>
+            </div>
+            <div className="generatepayroll-grid-item">
+              <button type="button" className="generatepayroll-button" onClick={handleGenerateReport}>
+                Generate Payroll Report
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
   );
-}
+};
 
-export default Payroll;
+export default GeneratePayroll;

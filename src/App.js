@@ -28,8 +28,9 @@ import Form16 from './Reports/Form16';
 import TaskDashboard from './TaskManagement/TaskDashboard';
 import AssignTasks from './TaskManagement/AssignTasks';
 import MyTasks from './TaskManagement/MyTasks';
-import TaskHistory from './TaskManagement/TaskHistory';
+import TaskDelegated from './TaskManagement/TaskDelegated';
 import TaskCategories from './TaskManagement/TaskCategories';
+import TaskTemplate from './TaskManagement/TaskTemplate/TaskTemplate';
 
 function AppContent ({ handleLogout }) {
   const { navbarOpen } = useContext(NavbarContext);
@@ -59,7 +60,8 @@ function AppContent ({ handleLogout }) {
         <Route path="/task-management" element={<TaskDashboard />} />
         <Route path="/assign-tasks" element={<AssignTasks />} />
         <Route path="/my-tasks" element={<MyTasks />} />
-        <Route path="/task-history" element={<TaskHistory />} />
+        <Route path="/task-delegated" element={<TaskDelegated />} />
+        <Route path="/task-template" element={<TaskTemplate />} />
 
         <Route path="/task-categories" element={<TaskCategories />} />
       </Routes>

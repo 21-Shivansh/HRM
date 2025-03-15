@@ -1,0 +1,197 @@
+/* AssignTasks.css */
+
+.popup-overlay {
+  position: fixed;
+  top: 15vh;
+  left: 10vw;
+  width: 80vw;
+  height: 75vh;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  margin: 5vw;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    
+}
+
+.popup-content {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  width: 100%;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  position: relative;
+}
+
+.popup-close-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+.taskmy-add-button {
+  padding: 10px 20px;
+  font-size: 1rem;
+  background-color: #9565cf;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  margin: 2vh 40vw;
+}
+
+.taskmy-add-button:hover {
+  background-color: #7f56b0;
+}
+
+.taskassign-paper {
+  height: 100%;
+  text-align: center;
+  background-color: #f5f5f5;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.taskassign-title {
+  font-size: 1.5rem;
+  margin-bottom: 16px;
+  margin-top: 0;
+}
+
+.taskassign-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 1vh;
+  overflow-y: scroll;
+  height: 70vh;
+}
+
+.taskassign-grid-item {
+  display: flex;
+  flex-direction: column;
+}
+
+.taskassign-label {
+  margin-bottom: 8px;
+  font-weight: bold;
+}
+
+.taskassign-input,
+.taskassign-select {
+  padding: 8px;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.taskassign-checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.taskassign-checkbox {
+  width: 16px;
+  height: 16px;
+}
+
+.taskassign-subtitle {
+  font-size: 1.25rem;
+  margin-bottom: 8px;
+}
+
+.taskassign-toggle-group {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+}
+
+.taskassign-toggle-button {
+  padding: 8px 16px;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.taskassign-toggle-button.active {
+  background-color: #d8ff29;
+  color: black;
+}
+
+.taskassign-button {
+  padding: 8px 16px;
+  font-size: 1rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.taskassign-upload-button {
+  background-color: #28a745;
+  color: white;
+}
+
+.taskassign-stop-button {
+  background-color: #dc3545;
+  color: white;
+}
+
+.taskassign-record-button {
+  background-color: #28a745;
+  color: white;
+}
+
+.taskassign-assign-button {
+  background-color: #007bff;
+  color: white;
+}
+
+.taskassign-attachments,
+.taskassign-voice-note {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.taskassign-delete-button {
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 4px 8px;
+  cursor: pointer;
+}
+
+.taskassign-snackbar {
+  position: fixed;
+  bottom: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #28a745;
+  color: white;
+  padding: 16px;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.taskassign-alert {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.taskassign-close-button {
+  background-color: transparent;
+  color: white;
+  border: none;
+  cursor: pointer;
+}

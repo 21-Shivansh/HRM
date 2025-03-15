@@ -9,6 +9,9 @@ import PriorityHighIcon from '@mui/icons-material/PriorityHigh';
 import RepeatIcon from '@mui/icons-material/Repeat';
 import TaskDetailsModal from './MyTasksDetails';
 
+import AssignNewTaskPopup from './AssignTasks'; // Import the new popup component
+
+
 const tasks = [
   {
     id: 1,
@@ -112,7 +115,7 @@ const tasks = [
   },
 ];
 
-const MyTasks = () => {
+const TasksDelegated = () => {
   const [selectedButton, setSelectedButton] = useState('Upcoming');
   const [month, setMonth] = useState('');
   const [category, setCategory] = useState('');
@@ -121,6 +124,7 @@ const MyTasks = () => {
   const [frequency, setFrequency] = useState('');
   const [selectedTask, setSelectedTask] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isPopupOpen, setIsPopupOpen] = useState(false); // State to manage popup visibility
 
   const filterTasks = () => {
     const today = new Date('2025-03-07');
@@ -172,9 +176,19 @@ const MyTasks = () => {
     setIsModalOpen(true);
   };
 
+  const handleAddNewTaskClick = () => {
+    setIsPopupOpen(true);
+  };
+
+  const handleClosePopup = () => {
+    setIsPopupOpen(false);
+  };
+
   return (
     <div className="taskmy-root">
       <div className="taskmy-sticky-grid">
+        <button className="taskmy-add-button" onClick={handleAddNewTaskClick}>Add New Task</button> {/* Add New Task button */}
+      
         <div className="taskmy-grid-item due-date">
           <button
             className={`taskmy-button ${selectedButton === 'Due Today' ? 'active' : ''}`}
@@ -345,8 +359,13 @@ const MyTasks = () => {
           selectedTask={selectedTask}
         />
       )}
+
+      {isPopupOpen && (
+        <AssignNewTaskPopup handleClose={handleClosePopup} />
+      )}
+
     </div>
   );
 };
 
-export default MyTasks;
+export default TasksDelegated;
