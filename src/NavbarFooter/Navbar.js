@@ -44,7 +44,8 @@ function Navbar() {
     ]},
     { title: 'Payroll Processing', icon: 'fa-money-check-alt', path: '/payroll-processing', links: [
       { name: 'Generate Payslip', path: '/generate-payslip' },
-      { name: 'Generate TDS Report', path: '/generate-tds-report' }
+      { name: 'Generate TDS Report', path: '/generate-tds-report' },
+      { name: 'Salary Payment', path: '/salary-payment' }
     ]},
     { title: 'Reports', icon: 'fa-chart-line', path: '/reports', links: [
       { name: 'Attendance Reports', path: '/attendance-reports' },

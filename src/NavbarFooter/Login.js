@@ -1,32 +1,12 @@
 import React, { useState } from 'react';
-import { TextField, Button, Grid, Typography, Paper } from '@mui/material';
-import { styled } from '@mui/material/styles';
 import { useNavigate } from 'react-router-dom';
-
-const Root = styled('div')(({ theme }) => ({
-  flexGrow: 1,
-  padding: theme.spacing(3),
-  height: '100vh',
-  display: 'flex',
-  justifyContent: 'center',
-  alignItems: 'center',
-}));
-
-const PaperStyled = styled(Paper)(({ theme }) => ({
-  padding: theme.spacing(3),
-  textAlign: 'center',
-  color: theme.palette.text.secondary,
-  maxWidth: 400,
-  width: '100%',
-}));
-
-const ButtonStyled = styled(Button)(({ theme }) => ({
-  marginTop: theme.spacing(2),
-}));
+import './Login.css';
+import Logo from '../Components/TalentCornerLogo.jpeg';
 
 const Login = ({ onLogin }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
 
   const handleLogin = () => {
@@ -39,45 +19,68 @@ const Login = ({ onLogin }) => {
   };
 
   return (
-    <Root>
-      <PaperStyled>
-        <Typography variant="h4" gutterBottom>
-          Login
-        </Typography>
-        <form noValidate autoComplete="off">
-          <Grid container spacing={3}>
-            <Grid item xs={12}>
-              <TextField
-                required
-                id="username"
-                name="username"
-                label="Username"
-                fullWidth
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                required
+    <div className="login-root">
+      <div className="login-left">
+        <h1 className="login-title">CRM-Mini</h1>
+        <p className="login-subtitle">Enter your credentials to access your account</p>
+        <form className="login-form" noValidate autoComplete="off">
+          <div className="login-form-group">
+            <label htmlFor="username" className="login-label">Email address/Username</label>
+            <input
+              type="text"
+              id="username"
+              name="username"
+              className="login-input"
+              placeholder="Enter your username"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+            />
+          </div>
+          <div className="login-form-group">
+            <label htmlFor="password" className="login-label">Password</label>
+            <div className="login-password-wrapper">
+              <input
+                type={showPassword ? 'text' : 'password'}
                 id="password"
                 name="password"
-                label="Password"
-                type="password"
-                fullWidth
+                className="login-input"
+                placeholder="Enter your password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />
-            </Grid>
-            <Grid item xs={12}>
-              <ButtonStyled variant="contained" color="primary" onClick={handleLogin}>
-                Login
-              </ButtonStyled>
-            </Grid>
-          </Grid>
+              <button
+                type="button"
+                className="login-show-password"
+                onClick={() => setShowPassword(!showPassword)}
+              >
+                <i className={showPassword ? 'fas fa-eye-slash' : 'fas fa-eye'}></i>
+              </button>
+            </div>
+          </div>
+          <div className="login-form-group">
+            <label className="login-checkbox-label">
+              <input type="checkbox" className="login-checkbox" />
+              Remember for 30 days
+            </label>
+          </div>
+          <button type="button" className="login-button" onClick={handleLogin}>
+            Login
+          </button>
         </form>
-      </PaperStyled>
-    </Root>
+        <div className="login-footer">
+          <img src={Logo} alt="Logo" className="login-logo" />
+          <p className="login-footer-text">Talent Corner HR Services Pvt Ltd</p>
+        </div>
+      </div>
+      <div className="login-right">
+        <div className="login-nav">
+          <button className="login-nav-button">Home</button>
+          <button className="login-nav-button">About Us</button>
+          <button className="login-nav-button">Blog</button>
+        </div>
+        <img src={Logo} alt="Logo" className="login-right-logo" />
+      </div>
+    </div>
   );
 };
 

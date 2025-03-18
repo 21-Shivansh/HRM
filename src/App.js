@@ -21,6 +21,7 @@ import EmployeeList from './EmployeeManagement/EmployeeList';
 import Payroll from './PayrollProcessing/Payroll';
 import GeneratePaySlip from './PayrollProcessing/GeneratePaySlip';
 import GenerateTDS from './PayrollProcessing/GenerateTDS';
+import SalaryPayment from './PayrollProcessing/SalaryPayment';
 
 import AttendanceReports from './Reports/AttendanceReports';
 import Form16 from './Reports/Form16';
@@ -52,6 +53,7 @@ function AppContent ({ handleLogout }) {
 
         <Route path="/payroll-statements" element={<Payroll />} />
         <Route path="/generate-payslip" element={<GeneratePaySlip />} />
+        <Route path="/salary-payment" element={<SalaryPayment />} />
 
         <Route path="/generate-tds-report" element={<GenerateTDS />} />
         <Route path="/attendance-reports" element={<AttendanceReports />} />

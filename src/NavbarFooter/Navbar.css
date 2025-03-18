@@ -66,13 +66,16 @@
   width: 100%;
 }
 
+.dropdown.active {
+  background-color: #9575cd; /* Change background color for active item */
+}
+
 .dropdown .dropbtn {
   display: flex;
   align-items: center;
   justify-content: space-around;
   cursor: pointer;
-  padding: 10px 0;
-  width: 100%;
+  padding: 10px 0 10px 10px;
   color: #3b424a;
 }
 
@@ -84,6 +87,7 @@
 
 .arrow {
   margin-right: 1em;
+  color: #9575cd;
   transition: transform 0.3s ease; /* Add transition for smooth rotation */
 }
 
@@ -95,11 +99,16 @@
   display: none;
   flex-direction: column;
   width: 100%;
-  background-color: #9575cf;
 }
 
 .dropdown-content.show {
   display: flex;
+  background-color: #9575cd;
+}
+
+.dropdown-content.active {
+  display: flex;
+  background-color: #ffffff;
 }
 
 .dropdown-text {
@@ -111,7 +120,7 @@
 }
 
 .dropdown-text:hover {
-  background-color: #333;
+  background-color: #3b424a;
 }
 
 .navbar-list .active,

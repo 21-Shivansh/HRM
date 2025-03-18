@@ -1,0 +1,180 @@
+  .salary-payment-title {
+    font-size: 2rem;
+    margin-bottom: 10px;
+    text-align: left;
+    margin-top: 0;
+  }
+  
+  .salary-payment-subtitle {
+    font-size: 1rem;
+    margin-bottom: 20px;
+    text-align: left;
+  }
+  
+  .salary-payment-tabs {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+  
+  .salary-payment-tab {
+    padding: 10px 20px;
+    background-color: white;
+    border: 1px solid #3B2858;
+    color: #3B2858;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .salary-payment-tab.active {
+    background-color: #3B2858;
+    color: white;
+  }
+  
+  .salary-payment-modes {
+    display: flex;
+    gap: 10px;
+  }
+  
+  .salary-payment-mode {
+    padding: 10px 20px;
+    background-color: transparent;
+    border: none;
+    color: #3B2858;
+    cursor: pointer;
+    transition: font-weight 0.3s, text-decoration 0.3s;
+  }
+  
+  .salary-payment-mode.active {
+    font-weight: bold;
+    text-decoration: underline;
+  }
+  
+  .salary-payment-divider {
+    border: none;
+    position: relative;
+    top: -20px;
+    border-top: 0.5px solid #cccccc;
+    margin-bottom: 20px;
+    width: 90%;
+  }
+  
+  .salary-payment-bulk {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  
+  .salary-payment-search {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  .salary-payment-search-icon {
+    font-size: 1.5rem;
+    color: #3B2858;
+  }
+  
+  .salary-payment-search-input {
+    padding: 10px;
+    border: 1px solid #3B2858;
+    border-radius: 4px;
+    width: 100%;
+  }
+  
+  .salary-payment-filters {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .salary-payment-select-container {
+    display: flex;
+    gap: 10px;
+  }
+  
+  .salary-payment-select {
+    padding: 10px;
+    border: 1px solid #3B2858;
+    border-radius: 4px;
+  }
+  
+  .salary-payment-proceed-button {
+    padding: 10px 20px;
+    background-color: #3B2858;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  /*
+  .salary-payment-table-container {
+    
+  }
+  */
+  
+  .salary-payment-table-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+  
+  .salary-payment-table-title {
+    font-size: 1.5rem;
+    margin: 0;
+  }
+  
+  .salary-payment-download-button {
+    padding: 10px 20px;
+    background-color: #3B2858;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .salary-payment-table-wrapper {
+    overflow-x: auto;
+    overflow-y: auto;
+    height: 35vh;
+  }
+  
+  .salary-payment-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .salary-payment-table th,
+  .salary-payment-table td {
+    padding: 10px;
+    border: 1px solid #ddd;
+    text-align: left;
+  }
+  
+  .salary-payment-action {
+    display: flex;
+    gap: 10px;
+  }
+  
+  .salary-payment-action i {
+    cursor: pointer;
+  }
+
+  .salary-payment-action .edit-icon {
+    color: green;
+  }
+  
+  .salary-payment-action .delete-icon {
+    color: red;
+  }
+
+  .salary-payment-table th:last-child,
+  .salary-payment-table td:last-child {
+    position: sticky;
+    right: 0;
+    background-color: #fff;
+    z-index: 1;
+  }
