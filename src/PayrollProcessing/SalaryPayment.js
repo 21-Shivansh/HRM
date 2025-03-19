@@ -1,12 +1,19 @@
 import React, { useState } from 'react';
 import './SalaryPayment.css';
-import salaryData from './SalaryPaymentsData';
+import Payroll, { payrolls } from './SalaryPaymentsData';
 
 const SalaryPayment = () => {
   const [activeTab, setActiveTab] = useState('salary');
   const [activeMode, setActiveMode] = useState('bulk');
   const [year, setYear] = useState('2025');
   const [month, setMonth] = useState('Jan');
+  const [isModalOpen, setIsModalOpen] = useState(false); 
+  const [selectedRows, setSelectedRows] = useState([]);
+  const [payrollData, setPayrollData] = useState(() => payrolls.map((payroll, index) => ({
+    id: index + 1,
+    ...payroll,
+    salaryToBePaid: false, // Add this field to track checkbox state
+  })));
 
   const handleTabClick = (tab) => {
     setActiveTab(tab);
@@ -14,6 +21,39 @@ const SalaryPayment = () => {
 
   const handleModeClick = (mode) => {
     setActiveMode(mode);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false); 
+  };
+
+  const handleModalSubmit = () => {
+    const updatedData = payrollData.map((row) =>
+      row.salaryToBePaid ? { ...row, status: 'Paid' } : row
+    );
+    setPayrollData(updatedData); // Update the status of selected rows to "Paid"
+    setIsModalOpen(false); // Close the modal
+  };
+
+  const handleCheckboxChange = (id) => {
+    const updatedData = payrollData.map((row) =>
+      row.id === id ? { ...row, salaryToBePaid: !row.salaryToBePaid } : row
+    );
+
+    // Update selected rows
+    const updatedSelectedRows = updatedData.filter((row) => row.salaryToBePaid);
+    setPayrollData(updatedData);
+    setSelectedRows(updatedSelectedRows);
+  };
+
+  const handleProceedClick = () => {
+    /*
+    if (selectedRows.length === 0) {
+      alert('Please select at least one row to proceed.');
+      return;
+    }
+      */
+    setIsModalOpen(true); // Open the modal
   };
 
   return (
@@ -84,7 +124,12 @@ const SalaryPayment = () => {
                 ))}
               </select>
             </div>
-            <button className="salary-payment-proceed-button">Proceed</button>
+            <button
+              className="salary-payment-proceed-button"
+              onClick={handleProceedClick} 
+            >
+              Proceed
+            </button>
           </div>
           <div className="salary-payment-table-container">
             <div className="salary-payment-table-header">
@@ -92,89 +137,44 @@ const SalaryPayment = () => {
               <button className="salary-payment-download-button">Download</button>
             </div>
             <div className="salary-payment-table-wrapper">
-              <table className="salary-payment-table">
-                <thead>
-                  <tr>
-                    <th>Employee Name</th>
-                    <th>Days in Month</th>
-                    <th>Paid Days</th>
-                    <th>Fixed GROSS Salary (NEW)</th>
-                    <th>Basic + DA</th>
-                    <th>HRA</th>
-                    <th>Conveyance</th>
-                    <th>Medical Allow</th>
-                    <th>Other ALLOWANCE</th>
-                    <th>Gross</th>
-                    <th>Earn Basic</th>
-                    <th>Earn HRA</th>
-                    <th>Earn Conveyance</th>
-                    <th>Earn Medical Allow</th>
-                    <th>Incentive</th>
-                    <th>Earn OTHER Allo</th>
-                    <th>Earn Gross</th>
-                    <th>PF WAGES</th>
-                    <th>PF</th>
-                    <th>ESIC</th>
-                    <th>PT</th>
-                    <th>LWF</th>
-                    <th>Advance</th>
-                    <th>Total Deduction</th>
-                    <th>Net Payable</th>
-                    <th>Graduity</th>
-                    <th>EMPYER PF</th>
-                    <th>EMPYER ESIC</th>
-                    <th>Bonus</th>
-                    <th>EMPLOYER LWF</th>
-                    <th>CTC</th>
-                    <th>Remark</th>
-                    <th>Remark2</th>
-                    <th>Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {salaryData.map((row, index) => (
-                    <tr key={index}>
-                      <td>{row.name}</td>
-                      <td>{row.daysInMonth}</td>
-                      <td>{row.paidDays}</td>
-                      <td>{row.fixedGrossSalary}</td>
-                      <td>{row.basicDA}</td>
-                      <td>{row.hra}</td>
-                      <td>{row.conveyance}</td>
-                      <td>{row.medicalAllow}</td>
-                      <td>{row.otherAllowance}</td>
-                      <td>{row.gross}</td>
-                      <td>{row.earnBasic}</td>
-                      <td>{row.earnHRA}</td>
-                      <td>{row.earnConveyance}</td>
-                      <td>{row.earnMedicalAllow}</td>
-                      <td>{row.incentive}</td>
-                      <td>{row.earnOtherAllowance}</td>
-                      <td>{row.earnGross}</td>
-                      <td>{row.pfWages}</td>
-                      <td>{row.pf}</td>
-                      <td>{row.esic}</td>
-                      <td>{row.pt}</td>
-                      <td>{row.lwf}</td>
-                      <td>{row.advance}</td>
-                      <td>{row.totalDeduction}</td>
-                      <td>{row.netPayable}</td>
-                      <td>{row.graduity}</td>
-                      <td>{row.employerPF}</td>
-                      <td>{row.employerESIC}</td>
-                      <td>{row.bonus}</td>
-                      <td>{row.employerLWF}</td>
-                      <td>{row.ctc}</td>
-                      <td>{row.remark}</td>
-                      <td>{row.remark2}</td>
-                      <td className="salary-payment-action">
-                        <i className="fas fa-edit edit-icon"></i>
-                        <i className="fas fa-trash delete-icon"></i>
-                        </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+            <Payroll
+              data={payrollData}
+              onCheckboxChange={handleCheckboxChange}
+            />
+            </div>
+          </div>
+        </div>
+      )}
+
+      {isModalOpen && (
+        <div className="salary-payment-modal">
+          <div className="salary-payment-modal-content">
+            {/* Close button on the top-right */}
+            <button className="salary-payment-modal-close-top" onClick={handleCloseModal}>
+              &times;
+            </button>
+            <div className="salary-payment-modal-grid">
+              <div className="salary-payment-modal-row">
+                <label>Paid on Date</label>
+                <input type="date" className="salary-payment-modal-input" />
+              </div>
+              <div className="salary-payment-modal-row">
+                <label>UTR</label>
+                <input type="text" className="salary-payment-modal-input" placeholder="Enter UTR" />
+              </div>
+              <div className="salary-payment-modal-row">
+                <label>Amount</label>
+                <input type="number" className="salary-payment-modal-input" placeholder="Enter Amount" />
+              </div>
+              <div className="salary-payment-modal-row">
+                <label>Bank Name</label>
+                <input type="text" className="salary-payment-modal-input" placeholder="Enter Bank Name" />
+              </div>
+            </div>
+            <div className="salary-payment-modal-actions">
+            <button className="salary-payment-modal-submit" onClick={handleModalSubmit}>
+                Save
+              </button>
             </div>
           </div>
         </div>
