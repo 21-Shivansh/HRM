@@ -105,14 +105,13 @@
     border-radius: 12px;
     box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
     width: 90%;
-    max-width: 900px;
     margin: auto;
-    height: 49vh;
+    height: 40vh;
     overflow-y: scroll;
 }
 
 /* Header Section */
-.payroll-header {
+.payroll-container {
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
@@ -149,13 +148,69 @@
     min-width: 300px; /* Minimum width for responsiveness */
   }
 
+  .button-container {
+    display: flex;
+    justify-content: space-between; /* Space out the buttons */
+    margin-bottom: 20px; /* Add spacing below the buttons */
+  }
+
+  .payroll-actions {
+    flex: 1; /* Take up less space */
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    background-color: #ffffff; /* White background */
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+
+  .icon-container {
+    display: flex;
+    justify-content: center;
+    gap: 10px; /* Space between icons */
+  }
+  
+  /* Icon-Only Button Styles */
+  .icon-container button {
+    background: none; /* Remove background */
+    border: none; /* Remove border */
+    padding: 0; /* Remove padding */
+    cursor: pointer; /* Pointer cursor on hover */
+    color: #4c3f85; /* Default icon color */
+    font-size: 20px; /* Adjust icon size */
+    transition: color 0.3s ease, transform 0.2s ease; /* Smooth hover and active effects */
+  }
+  
+  /* Hover Effect for Icons */
+  .icon-container button:hover {
+    color: #5959aa; /* Change icon color on hover */
+    transform: scale(1.2); /* Slightly enlarge the icon */
+  } 
+
+  
+/* Active Effect for Icons */
+.icon-container button:active {
+    color: #6a6fcf; /* Change icon color when clicked */
+    transform: scale(1); /* Reset scale when clicked */
+  }
+  
+  /* Delete Button (Red Icon) */
+  .icon-container .delete-button {
+    color: red; /* Default red color for delete button */
+  }
+  
+  .icon-container .delete-button:hover {
+    color: darkred; /* Darker red on hover */
+  }
+
 /* Net Pay Box */
 .net-pay {
     background: #d2c4f6;
     color: #4c3f85;
     padding: 15px;
     border-radius: 10px;
-    width: 220px;
+    width: 90%;
     text-align: center;
     font-weight: bold;
     border-left: 5px solid #4c3f85;
@@ -246,35 +301,43 @@
 /* Icon Container */
 .icon-container {
     align-items: center;
-    justify-content: space-between;
+    justify-content: right;
     margin: 0 10px; /* Added margin for spacing between icons */
 }
 
 /* Button Styles */
 .icon-container button {
-    background-color: #7887d2; /* Default button color */
     align-items: center;
-    color: white;
+    color: rgb(75, 75, 75);
     border: none;
     padding: 10px 15px;
     font-size: 14px;
     font-weight: bold;
     border-radius: 5px;
     cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.2s ease;
+    transition: transform 0.2s ease;
     margin: 0 5px; /* Spacing between buttons */
 }
 
 .icon-container button:hover {
-    background-color: #5959aa; /* Hover color */
     transform: scale(1.05);
 }
 
 .icon-container button:active {
-    background-color: #6a6fcf; /* Active color */
     transform: scale(0.98);
 }
 
-.icon-container .delete-button {
-    background-color: red; /* Red color for delete button */
-}
+.proceed-button-single {
+    padding: 10px 20px;
+    background-color: #4F378A;
+    color: white;
+    border: 1px solid #3B2858;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .proceed-button-single.active {
+    color: #3B2858;
+    background-color: white;
+  }

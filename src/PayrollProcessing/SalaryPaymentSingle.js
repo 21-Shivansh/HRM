@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import html2canvas from 'html2canvas'; // Importing html2canvas
 import { FaDownload, FaEdit, FaTrash } from 'react-icons/fa'; // Importing icons
 import "./SalaryPaymentSingle.css";
+import { height } from "@mui/system";
 
-const SalaryPaymentSingle = ({ employee }) => {
+const SalaryPaymentSingle = ({ employee, divBox=true }) => {
   const [isPopupVisible, setPopupVisible] = useState(false);
   const [calculatedData, setCalculatedData] = useState(null);
 
@@ -39,6 +41,7 @@ const SalaryPaymentSingle = ({ employee }) => {
       const lwf = 25;
       const totalDeduction = pf + esic + pt + lwf;
       const netPayable = earnGross - totalDeduction;
+      const bonus = Math.round(basicDA * 0.0833);
 
       // Set the calculated data
       setCalculatedData({
@@ -60,6 +63,7 @@ const SalaryPaymentSingle = ({ employee }) => {
         lwf,
         totalDeduction,
         netPayable,
+        bonus,
       });
     }
   }, [employee]);
@@ -108,65 +112,84 @@ const SalaryPaymentSingle = ({ employee }) => {
       });
   };
 
-  return (
-    <div className="payroll-card">
-      <div className="payroll-header">
-      <div className="payroll-info">
-          <h2>{employee.name}</h2>
-          <div className="payroll-info-row">
-            {/* First Row */}
-            <div className="payroll-info-column">
-              <p>Employee Name: {employee.name || "N/A"}</p>
-              <p>Designation: {employee.designation || "N/A"}</p>
-              <p>Employee ID: {employee.id}</p>
-              <p>Date of Joining: {employee.dateOfJoining || "N/A"}</p>
-              <p>Pay Period: {employee.payPeriod || "N/A"}</p>
-              <p>Pay Date: {employee.payDate || "N/A"}</p>
-              <p>PF A/C Number: {employee.pfAccountNumber || "N/A"}</p>
-            </div>
+  const location = useLocation();
+    const containerHeight = location.pathname === '/pay-sheet' 
+    ? { maxHeight: '60vh', height: 'max-content' } 
+    : {}; 
 
-            {/* Second Row */}
-            <div className="payroll-info-column">
-              <p>Bank A/C Name: {employee.bankAccountName || "N/A"}</p>
-              <p>Bank Name: {employee.bankName || "N/A"}</p>
-              <p>Bank A/C Number: {employee.bankAccountNumber || "N/A"}</p>
-              <p>PR A/C Number: {employee.prAccountNumber || "N/A"}</p>
-              <p>ESI Number: {employee.esiNumber || "N/A"}</p>
-              <p>UAN Number: {employee.uanNumber || "N/A"}</p>
-              <p>PAN Number: {employee.panNumber || "N/A"}</p>
+  return (
+    <div className="payroll-card" style={containerHeight}>
+      <div className="payroll-container">
+        
+        <div className="payroll-info">
+            <h2>{employee.name}</h2>
+            <div className="payroll-info-row">
+              {/* First Row */}
+              <div className="payroll-info-column">
+                <p>Employee Name: {employee.name || "N/A"}</p>
+                <p>Designation: {employee.designation || "N/A"}</p>
+                <p>Employee ID: {employee.id}</p>
+                <p>Date of Joining: {employee.date_of_joining || "N/A"}</p>
+                <p>Pay Period: {employee.pay_period || "N/A"}</p>
+                <p>Pay Date: {employee.pay_date || "N/A"}</p>
+                <p>PF A/C Number: {employee.pf_account_number || "N/A"}</p>
+              </div>
+
+              {/* Second Row */}
+              <div className="payroll-info-column">
+                <p>Bank A/C Name: {employee.bank_account_name || "N/A"}</p>
+                <p>Bank Name: {employee.bank_name || "N/A"}</p>
+                <p>Bank A/C Number: {employee.bank_account_number || "N/A"}</p>
+                <p>PR A/C Number: {employee.pr_account_number || "N/A"}</p>
+                <p>ESI Number: {employee.esi_number || "N/A"}</p>
+                <p>UAN Number: {employee.uan_number || "N/A"}</p>
+                <p>PAN Number: {employee.pan_number || "N/A"}</p>
+              </div>
             </div>
-          </div>
+        </div>
+    
+      { divBox && (
+      <div className="payroll-actions">
+        
+        <button className="proceed-button-single" onClick={handleProceedClick}> Proceed </button>
+        
+        <div className="icon-container">
+          <button
+            onClick={() => {
+              html2canvas(document.querySelector(".payroll-card")).then((canvas) => {
+                const link = document.createElement("a");
+                link.href = canvas.toDataURL("image/png");
+                link.download = "payroll_card_snapshot.png";
+                link.click();
+              });
+            }}
+          >
+            <FaDownload />
+          </button>
+          <button onClick={() => {/* Functionality to edit */}}>
+            <FaEdit />
+          </button>
+          <button
+            onClick={() => {/* Functionality to delete */}}
+            className="delete-button"
+          >
+            <FaTrash />
+          </button>
         </div>
 
         <div className="net-pay">
-          <h3>{calculatedData ? calculatedData.netPayable.toFixed(2) : "0.00"}</h3>
-          <p>Employee Net Pay</p>
-          <p>Paid Days: {employee.paidDays || 0}</p>
-          <p>Leave: {employee.leaveDays || 0}</p>
+            <h3>{calculatedData ? calculatedData.netPayable.toFixed(2) : "0.00"}</h3>
+            <p>Employee Net Pay</p>
+            <p>Paid Days: {employee.paidDays || 31}</p>
+            <p>Leave: {employee.leaveDays || 0}</p>
+          </div>
         </div>
+      )}
       </div>
-
-      <button onClick={handleProceedClick}> Proceed </button>
-      <button onClick={() => {
-        html2canvas(document.querySelector(".payroll-card")).then(canvas => {
-          const link = document.createElement('a');
-          link.href = canvas.toDataURL("image/png");
-          link.download = "payroll_card_snapshot.png";
-          link.click();
-        });
-      }}>
-        <FaDownload /> Download
-      </button>
-      <button onClick={() => {/* Functionality to edit */}}>
-        <FaEdit /> Edit
-      </button>
-      <button onClick={() => {/* Functionality to delete */}} style={{ color: 'red' }}>
-        <FaTrash /> Delete
-      </button>
-
       
 
       {isPopupVisible && (
+        <>
         <div className="popup-container">
           <div className="popup-content">
             <h2>Enter Payment Information</h2>
@@ -192,7 +215,6 @@ const SalaryPaymentSingle = ({ employee }) => {
             </form>
           </div>
         </div>
-      )}
 
       <div className="salary-section">
         <div className="salary-breakdown-container">
@@ -240,7 +262,7 @@ const SalaryPaymentSingle = ({ employee }) => {
                 </tr>
                 <tr>
                   <td>Bonus</td>
-                  <td>XXX</td>
+                  <td>{calculatedData.bonus}</td>
                   <td>ESIC 0.75%</td>
                   <td>{calculatedData.esic}</td>
                 </tr>
@@ -275,6 +297,8 @@ const SalaryPaymentSingle = ({ employee }) => {
           <strong>{calculatedData ? calculatedData.netPayable.toFixed(2) : "0.00"}</strong>
         </div>
       </div>
+      </>
+    )}
     </div>
   );
 };

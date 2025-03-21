@@ -25,6 +25,8 @@ import SalaryPayment from './PayrollProcessing/SalaryPayment';
 
 import AttendanceReports from './Reports/AttendanceReports';
 import Form16 from './Reports/Form16';
+import PaySheet from './NavBarItems/PaySheet';
+import PaySlip from './NavBarItems/PaySlip';
 
 import TaskDashboard from './TaskManagement/TaskDashboard';
 import AssignTasks from './TaskManagement/AssignTasks';
@@ -58,6 +60,8 @@ function AppContent ({ handleLogout }) {
         <Route path="/generate-tds-report" element={<GenerateTDS />} />
         <Route path="/attendance-reports" element={<AttendanceReports />} />
         <Route path="/form-16" element={<Form16 />} />
+        <Route path="/pay-slip" element={<PaySlip />} />
+        <Route path="/pay-sheet" element={<PaySheet />} />
 
         <Route path="/task-management" element={<TaskDashboard />} />
         <Route path="/assign-tasks" element={<AssignTasks />} />

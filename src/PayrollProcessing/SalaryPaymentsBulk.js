@@ -1,10 +1,16 @@
 import React, { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import './SalaryPaymentsBulk.css';
 
 function CustomTable({ columns, data, onCheckboxChange }) {
 
+  const location = useLocation();
+    const containerHeight = location.pathname === '/pay-sheet' 
+    ? { height: '60vh' } 
+    : {}; 
+
   return (
-    <div className="custom-table-container">
+    <div className="custom-table-container" style={containerHeight}>
       <table className="custom-table">
         <thead>
           <tr>
@@ -124,6 +130,7 @@ function Payroll({ filteredPayrollData, onSelectedRowsChange }) {
       return {
         id: payroll.id || 0,
         name: payroll.name || '',
+        dateOfJoining: payroll.date_of_joining || '-',
         salary: payroll.salary || 0,
         daysInMonth,
         paidDays,
@@ -208,6 +215,7 @@ function Payroll({ filteredPayrollData, onSelectedRowsChange }) {
   const columns = [
     { header: 'Sr. No', accessor: 'id', className: 'sticky-column-left' },
     { header: 'Employee Name', accessor: 'name', className: 'sticky-column-left' },
+    { header: 'Date of Joining', accessor: 'doj' },
     { header: 'Days in month', accessor: 'daysInMonth' },
     { header: 'Paid Days', accessor: 'paidDays' },
     { header: 'Fixed GROSS Salary (NEW)', accessor: 'fixedGrossSalary' },

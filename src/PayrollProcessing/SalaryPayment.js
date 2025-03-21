@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import './SalaryPayment.css';
 import Payroll from './SalaryPaymentsBulk';
 import SalaryPaymentSingle from './SalaryPaymentSingle';
 import axios from 'axios';
+import { FaLessThanEqual } from 'react-icons/fa';
 
-const SalaryPayment = () => {
+const SalaryPayment = ({ showSubtitle = true, customTitle = "Salary Payment", topButtons = true, activePage = 'bulk', tableTitle= true, divActions=true }) => {
   const [activeTab, setActiveTab] = useState('salary');
-  const [activeMode, setActiveMode] = useState('bulk');
+  const [activeMode, setActiveMode] = useState(activePage);
   const [year, setYear] = useState('2025');
   const [month, setMonth] = useState('Jan');
   const [isModalOpen, setIsModalOpen] = useState(false); 
@@ -159,10 +161,18 @@ const SalaryPayment = () => {
     setIsDropdownVisible(false); // Hide the dropdown
   };
 
+  const location = useLocation();
+  const containerHeight = location.pathname === '/pay-sheet' 
+  ? { maxHeight: '60vh', height: 'max-content' } 
+  : {}; 
+
   return (
     <div className="salary-payment-root">
-      <h1 className="salary-payment-title">Salary Payment</h1>
-      <p className="salary-payment-subtitle">Search employee to get payroll</p>
+      <h1 className="salary-payment-title">{customTitle ? customTitle : 'Salary Payment'}</h1>
+      {showSubtitle && <p className="salary-payment-subtitle">Search employee to get payroll</p>}
+
+      {topButtons && (
+        <>
       <div className="salary-payment-tabs">
         <button
           className={`salary-payment-tab ${activeTab === 'salary' ? 'active' : ''}`}
@@ -192,6 +202,9 @@ const SalaryPayment = () => {
         </button>
       </div>
       <hr className="salary-payment-divider" />
+      </>
+      )}
+      
 
 
       {activeMode === 'bulk' && (
@@ -256,10 +269,10 @@ const SalaryPayment = () => {
           </div>
           <div className="salary-payment-table-container">
             <div className="salary-payment-table-header">
-              <h2 className="salary-payment-table-title">Bulk Salary Payment</h2>
+              { tableTitle && (<h2 className="salary-payment-table-title">Bulk Salary Payment</h2>)}
               <button className="salary-payment-download-button">Download</button>
             </div>
-            <div className="salary-payment-table-wrapper">
+            <div className="salary-payment-table-wrapper" style={{ height: containerHeight }}>
             {filteredPayrollData.length > 0 ? (
               <Payroll
                 filteredPayrollData={filteredPayrollData}
@@ -308,11 +321,35 @@ const SalaryPayment = () => {
                 ))}
             </ul>
             )}
+            <div className="salary-payment-select-container">
+              <select
+                className="salary-payment-select"
+                value={year}
+                onChange={(e) => setYear(e.target.value)}
+              >
+                {Array.from({ length: 11 }, (_, i) => 2015 + i).map((year) => (
+                  <option key={year} value={year}>
+                    {year}
+                  </option>
+                ))}
+              </select>
+              <select
+                className="salary-payment-select"
+                value={month}
+                onChange={(e) => setMonth(e.target.value)}
+              >
+                {['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'].map((month) => (
+                  <option key={month} value={month}>
+                    {month}
+                  </option>
+                ))}
+              </select>
+            </div>
           </div>
 
           {/* Display Selected Employee Details */}
           {selectedEmployee ? (
-            <SalaryPaymentSingle employee={selectedEmployee} />
+            <SalaryPaymentSingle employee={selectedEmployee} divBox={divActions}/>
           ) : (
             <p>Please select an employee to view details.</p>
           )}

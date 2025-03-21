@@ -273,6 +273,7 @@
 .salary-payment-search-container {
   display: flex;
   align-items: center;
+  margin-bottom: 1vh;;
   border: 1px solid #ddd;
   border-radius: 5px;
   padding: 10px;
@@ -315,4 +316,8 @@
 
 .salary-payment-dropdown-item:hover {
   background-color: #f4f4f4;
+}
+
+.salary-payment-single {
+  justify-items: center;
 }
