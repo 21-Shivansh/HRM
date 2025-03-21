@@ -107,6 +107,8 @@
     width: 90%;
     max-width: 900px;
     margin: auto;
+    height: 49vh;
+    overflow-y: scroll;
 }
 
 /* Header Section */
@@ -135,6 +137,17 @@
     font-size: 14px;
     color: #666;
 }
+
+.payroll-info-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px; /* Space between columns */
+  }
+  
+  .payroll-info-column {
+    flex: 1; /* Equal width for both columns */
+    min-width: 300px; /* Minimum width for responsiveness */
+  }
 
 /* Net Pay Box */
 .net-pay {

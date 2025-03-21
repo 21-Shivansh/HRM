@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './SalaryPayment.css';
-import Payroll from './SalaryPaymentsData';
+import Payroll from './SalaryPaymentsBulk';
 import SalaryPaymentSingle from './SalaryPaymentSingle';
 import axios from 'axios';
 
@@ -20,8 +20,13 @@ const SalaryPayment = () => {
   */
 
   const [payrollData, setPayrollData] = useState([]);
-  const [searchTerm, setSearchTerm] = useState(''); // Track search input
-  const [filteredEmployees, setFilteredEmployees] = useState([]); // Filtered employees for suggestions
+  const [searchTerm, setSearchTerm] = useState(''); 
+  const [filteredEmployees, setFilteredEmployees] = useState([]);
+
+  const [employees, setEmployees] = useState([]); 
+  const [selectedEmployee, setSelectedEmployee] = useState(null); 
+  const [searchSingleTerm, setSearchSingleTerm] = useState(''); 
+  const [isDropdownVisible, setIsDropdownVisible] = useState(true); 
    
   const generatePayrollData = (employees) => {
     return employees.map((employee) => ({
@@ -81,6 +86,7 @@ const SalaryPayment = () => {
       .then((response) => {
         const generatedData = generatePayrollData(response.data || []);
         setPayrollData(generatedData);
+        setEmployees(response.data || []);
       })
       .catch((error) => {
         console.error('Error fetching employee data:', error);
@@ -100,6 +106,15 @@ const SalaryPayment = () => {
       return (employee.name || '').toLowerCase().includes(searchTerm.toLowerCase());
     })
   );
+
+  const handleSingleSearchChange = (e) => {
+    setSearchSingleTerm(e.target.value); // Update search term
+  };
+  
+  const handleEmployeeSelect = (employee) => {
+    setSelectedEmployee(employee); // Set the selected employee
+    setIsDropdownVisible(false); // Hide the dropdown
+  };
 
   return (
     <div className="salary-payment-root">
@@ -215,7 +230,51 @@ const SalaryPayment = () => {
         </div>
       )}
 
-      {activeMode === 'single' && <SalaryPaymentSingle />}
+      {activeMode === 'single' && (
+        <div className="salary-payment-single">
+          <div className="salary-payment-dropdown">
+            <div className="salary-payment-search-container">
+            <input
+              type="text"
+              className="salary-payment-search-input"
+              placeholder="Search Employee"
+              value={searchSingleTerm}
+              onChange={(e) => {
+                setSearchSingleTerm(e.target.value); // Update search term
+                setIsDropdownVisible(true); // Show the dropdown when typing
+              }}
+              onFocus={() => setIsDropdownVisible(true)} // Show the dropdown when clicking on the search bar
+            />
+              <i className="fas fa-chevron-down salary-payment-dropdown-icon"></i>
+            </div>
+            { isDropdownVisible && (
+            <ul className="salary-payment-dropdown-list">
+              
+              {employees
+                .filter((employee) =>
+                  employee.name.toLowerCase().includes(searchSingleTerm.toLowerCase())
+                )
+                .map((employee) => (
+                  <li
+                    key={employee.id}
+                    className="salary-payment-dropdown-item"
+                    onClick={() => handleEmployeeSelect(employee)} // Select employee
+                  >
+                    {employee.name}
+                  </li>
+                ))}
+            </ul>
+            )}
+          </div>
+
+          {/* Display Selected Employee Details */}
+          {selectedEmployee ? (
+            <SalaryPaymentSingle employee={selectedEmployee} />
+          ) : (
+            <p>Please select an employee to view details.</p>
+          )}
+        </div>
+      )}
 
       {isModalOpen && (
         <div className="salary-payment-modal">

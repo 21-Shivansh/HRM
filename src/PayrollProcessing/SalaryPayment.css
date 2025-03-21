@@ -58,7 +58,7 @@
     top: -20px;
     border-top: 0.5px solid #cccccc;
     margin-bottom: -10px;
-    width: 90%;
+    width: calc(100% - 4vw);
   }
   
   .salary-payment-bulk {
@@ -260,4 +260,59 @@
   cursor: pointer;
   margin-top: 10vh;
   width: 50%;
+}
+
+/* Searchable Dropdown Container */
+.salary-payment-dropdown {
+  position: relative;
+  width: 100%;
+  margin: 20px auto;
+}
+
+/* Search Bar with Down Arrow */
+.salary-payment-search-container {
+  display: flex;
+  align-items: center;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  padding: 10px;
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.salary-payment-dropdown-icon {
+  margin-left: 10px;
+  color: #888;
+  cursor: pointer;
+}
+
+/* Dropdown List */
+.salary-payment-dropdown-list {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  max-height: 200px;
+  overflow-y: auto;
+  margin-top: 5px;
+  padding: 0;
+  list-style: none;
+}
+
+/* Dropdown Item */
+.salary-payment-dropdown-item {
+  padding: 10px;
+  font-size: 14px;
+  color: #333;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.salary-payment-dropdown-item:hover {
+  background-color: #f4f4f4;
 }

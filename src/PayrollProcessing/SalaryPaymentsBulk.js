@@ -1,5 +1,5 @@
 import React, { useState} from 'react';
-import './SalaryPaymentsData.css';
+import './SalaryPaymentsBulk.css';
 
 function CustomTable({ columns, data, onCheckboxChange }) {
   
