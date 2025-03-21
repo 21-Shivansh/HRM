@@ -14,7 +14,6 @@ const SalaryPaymentSingle = ({ employee }) => {
   useEffect(() => {
     if (employee) {
       
-      console.log("Employee Data:", employee);
       // Perform calculations based on the formulas
       const daysInMonth = 31;
       const paidDays = employee.paidDays || 31;
@@ -64,6 +63,50 @@ const SalaryPaymentSingle = ({ employee }) => {
       });
     }
   }, [employee]);
+
+  const handleFormSubmit = (e) => {
+    e.preventDefault(); // Prevent the default form submission behavior
+  
+    // Extract form data
+    const paidAmount = e.target.elements.paidAmount.value;
+    const bankName = e.target.elements.bankName.value;
+    const utr = e.target.elements.utr.value;
+    const paidDate = e.target.elements.paidDate.value;
+
+    if (!paidDate || !utr || !paidAmount || !bankName) {
+      alert('Please fill in all the fields.');
+      return;
+    }
+  
+    // Send data to the backend
+    fetch('http://localhost:5000/api/payments', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        paid_amount: paidAmount,
+        bank_name: bankName,
+        utr: utr,
+        status: 'Paid',
+        employee_id: employee.id,
+        date: e.target.elements.paidDate.value, // Default status
+      }),
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error('Failed to save payment');
+        }
+        return response.text();
+      })
+      .then((message) => {
+        console.log(message);
+        alert('Payment saved successfully');
+        setPopupVisible(false); // Close the popup
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+        alert('Failed to save payment');
+      });
+  };
 
   return (
     <div className="payroll-card">
@@ -127,22 +170,22 @@ const SalaryPaymentSingle = ({ employee }) => {
         <div className="popup-container">
           <div className="popup-content">
             <h2>Enter Payment Information</h2>
-            <form>
+            <form onSubmit={handleFormSubmit}>
               <label>
                 Paid on Date:
-                <input type="date" required />
+                <input type="date" name="paidDate" required />
               </label>
               <label>
                 Amount:
-                <input type="number" required />
+                <input type="number" name="paidAmount" required />
               </label>
               <label>
                 UTR:
-                <input type="text" required />
+                <input type="text" name="utr" required />
               </label>
               <label>
                 Bank Name:
-                <input type="text" required />
+                <input type="text" name="bankName" required />
               </label>
               <button type="submit">Save</button>
               <button type="button" onClick={() => setPopupVisible(false)}>Close</button>

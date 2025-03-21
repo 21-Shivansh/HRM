@@ -10,7 +10,7 @@ const SalaryPayment = () => {
   const [year, setYear] = useState('2025');
   const [month, setMonth] = useState('Jan');
   const [isModalOpen, setIsModalOpen] = useState(false); 
-  const [selectedRows, setSelectedRows] = useState([]);
+  const [selectedEmployeeIds, setSelectedEmployeeIds] = useState([]);  // for bulk processing
   /*
   const [payrollData, setPayrollData] = useState(() => payrolls.map((payroll, index) => ({
     id: index + 1,
@@ -49,14 +49,11 @@ const SalaryPayment = () => {
     setIsModalOpen(false); 
   };
 
-  const handleModalSubmit = () => {
-    const updatedData = payrollData.map((row) =>
-      row.salaryToBePaid ? { ...row, status: 'Paid' } : row
-    );
-    setPayrollData(updatedData); // Update the status of selected rows to "Paid"
-    setIsModalOpen(false); // Close the modal
+  const handleSelectedRowsChange = (selectedIds) => {
+    setSelectedEmployeeIds(selectedIds); // Update the parent state
+    console.log('Selected Employee IDs in Parent:', selectedIds); // Debugging
   };
-
+/*
   const handleCheckboxChange = (index) => {
     const updatedData = [...payrollData];
     updatedData[index].salaryToBePaid = !updatedData[index].salaryToBePaid;
@@ -69,6 +66,7 @@ const SalaryPayment = () => {
     setPayrollData(updatedData);
     setSelectedRows(updatedSelectedRows);
   };
+  */
 
   const handleProceedClick = () => {
     /*
@@ -78,6 +76,51 @@ const SalaryPayment = () => {
     }
       */
     setIsModalOpen(true); 
+  };
+
+  const handleBulkPayment = (e) => {
+    e.preventDefault(); // Prevent the default form submission behavior
+  
+    // Extract form data
+    const paidDate = e.target.elements.paidDate.value;
+    const paidAmount = e.target.elements.paidAmount.value;
+    const bankName = e.target.elements.bankName.value;
+    const utr = e.target.elements.utr.value;
+
+    if (!paidDate || !utr || !paidAmount || !bankName) {
+      alert('Please fill in all the fields.');
+      return;
+    }
+  
+    // Iterate over the selected employee IDs and send a POST request for each
+    selectedEmployeeIds.forEach((employeeId) => {
+      fetch('http://localhost:5000/api/payments', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          paid_amount: paidAmount,
+          bank_name: bankName,
+          utr: utr,
+          status: 'Paid',
+          employee_id: employeeId, // Use the current employee ID from the array
+        }),
+      })
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error(`Failed to save payment for employee ID: ${employeeId}`);
+          }
+          return response.text();
+        })
+        .then((message) => {
+          console.log(`Payment saved for employee ID: ${employeeId}`, message);
+        })
+        .catch((error) => {
+          console.error(`Error saving payment for employee ID: ${employeeId}`, error);
+        });
+    });
+  
+    alert('Payments saved successfully for all selected employees');
+    handleCloseModal();
   };
 
   useEffect(() => {
@@ -220,7 +263,7 @@ const SalaryPayment = () => {
             {filteredPayrollData.length > 0 ? (
               <Payroll
                 filteredPayrollData={filteredPayrollData}
-                onCheckboxChange={handleCheckboxChange}
+                onSelectedRowsChange={handleSelectedRowsChange}
               />
             ) : (
               <p className="no-matching-employees">No matching employees found.</p> // Show message if no matches
@@ -283,29 +326,31 @@ const SalaryPayment = () => {
             <button className="salary-payment-modal-close-top" onClick={handleCloseModal}>
               &times;
             </button>
-            <div className="salary-payment-modal-grid">
-              <div className="salary-payment-modal-row">
-                <label>Paid on Date</label>
-                <input type="date" className="salary-payment-modal-input" />
+            <form onSubmit={handleBulkPayment}>
+              <div className="salary-payment-modal-grid">
+                <div className="salary-payment-modal-row">
+                  <label>Paid on Date</label>
+                  <input type="date" name="paidDate" className="salary-payment-modal-input" required />
+                </div>
+                <div className="salary-payment-modal-row">
+                  <label>UTR</label>
+                  <input type="text" name="utr" className="salary-payment-modal-input" placeholder="Enter UTR" required />
+                </div>
+                <div className="salary-payment-modal-row">
+                  <label>Amount</label>
+                  <input type="number" name="paidAmount" className="salary-payment-modal-input" placeholder="Enter Amount" required />
+                </div>
+                <div className="salary-payment-modal-row">
+                  <label>Bank Name</label>
+                  <input type="text" name="bankName" className="salary-payment-modal-input" placeholder="Enter Bank Name" required />
+                </div>
               </div>
-              <div className="salary-payment-modal-row">
-                <label>UTR</label>
-                <input type="text" className="salary-payment-modal-input" placeholder="Enter UTR" />
+              <div className="salary-payment-modal-actions">
+                <button type="submit" className="salary-payment-modal-submit">
+                  Save
+                </button>
               </div>
-              <div className="salary-payment-modal-row">
-                <label>Amount</label>
-                <input type="number" className="salary-payment-modal-input" placeholder="Enter Amount" />
-              </div>
-              <div className="salary-payment-modal-row">
-                <label>Bank Name</label>
-                <input type="text" className="salary-payment-modal-input" placeholder="Enter Bank Name" />
-              </div>
-            </div>
-            <div className="salary-payment-modal-actions">
-            <button className="salary-payment-modal-submit" onClick={handleModalSubmit}>
-                Save
-              </button>
-            </div>
+            </form>
           </div>
         </div>
       )}
