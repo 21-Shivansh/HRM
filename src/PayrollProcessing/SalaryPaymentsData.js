@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState} from 'react';
 import './SalaryPaymentsData.css';
 
 function CustomTable({ columns, data, onCheckboxChange }) {
-
+  
   return (
     <div className="custom-table-container">
       <table className="custom-table">
@@ -49,6 +49,7 @@ function CustomTable({ columns, data, onCheckboxChange }) {
   );
 }
 
+/*
 export const payrolls = [
   { name: 'Aagam Sheth', salary: 29254, status: 'Unpaid' },
   { name: 'Avadai Marthuvar', salary: 29254, status: 'Unpaid' },
@@ -80,12 +81,15 @@ export const payrolls = [
   { name: 'SAUMYA KIRIT GALA', salary: 100000, status: 'Unpaid' },
   { name: 'Shreya Santosh Talashilkar', salary: 29454, status: 'Unpaid' },
 ];
+*/
 
+function Payroll({ filteredPayrollData, onCheckboxChange }) {
 
-function Payroll() {
+  const [payrollData, setPayrollData] = useState([]);
+  const [selectedRows, setSelectedRows] = useState([]); // used further, don't delete
 
-  const generatePayrollData = (payrolls) => {
-    return payrolls.map((payroll, index) => {
+  const generatePayrollData = (employees = []) => {
+    return employees.map((payroll) => {
       const daysInMonth = 31;
       const paidDays = 31;
       const fixedGrossSalary = payroll.salary;
@@ -118,8 +122,9 @@ function Payroll() {
       const ctc = earnGross + employerPF + employerESIC + graduity + employerLWF;
 
       return {
-        id: index + 1,
-        name: payroll.name,
+        id: payroll.id || 0,
+        name: payroll.name || '',
+        salary: payroll.salary || 0,
         daysInMonth,
         paidDays,
         fixedGrossSalary: `${fixedGrossSalary}`,
@@ -153,15 +158,14 @@ function Payroll() {
         remark: '-',
         remark2: '-',
         salaryToBePaid: false,
-        status: payroll.status,
+        status: payroll.status || 'Unpaid',
         action: '',
       };
     });
   };
 
-  const [payrollData, setPayrollData] = useState(() => generatePayrollData(payrolls));
-  const [selectedRows, setSelectedRows] = useState([]); // used in line 174
-  
+  const transformedPayrollData = generatePayrollData(filteredPayrollData);
+
   const handleCheckboxChange = (index) => {
     const updatedData = [...payrollData];
     updatedData[index].salaryToBePaid = !updatedData[index].salaryToBePaid;
@@ -217,7 +221,11 @@ function Payroll() {
 
   return (
     <div>
-      <CustomTable columns={columns} data={payrollData} onCheckboxChange={handleCheckboxChange} />
+      <CustomTable
+        columns={columns}
+        data={transformedPayrollData}
+        onCheckboxChange={onCheckboxChange}
+      />
     </div>
   );
 }

@@ -1,6 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './SalaryPayment.css';
-import Payroll, { payrolls } from './SalaryPaymentsData';
+import Payroll from './SalaryPaymentsData';
+import SalaryPaymentSingle from './SalaryPaymentSingle';
+import axios from 'axios';
 
 const SalaryPayment = () => {
   const [activeTab, setActiveTab] = useState('salary');
@@ -9,11 +11,26 @@ const SalaryPayment = () => {
   const [month, setMonth] = useState('Jan');
   const [isModalOpen, setIsModalOpen] = useState(false); 
   const [selectedRows, setSelectedRows] = useState([]);
+  /*
   const [payrollData, setPayrollData] = useState(() => payrolls.map((payroll, index) => ({
     id: index + 1,
     ...payroll,
     salaryToBePaid: false, // Add this field to track checkbox state
   })));
+  */
+
+  const [payrollData, setPayrollData] = useState([]);
+  const [searchTerm, setSearchTerm] = useState(''); // Track search input
+  const [filteredEmployees, setFilteredEmployees] = useState([]); // Filtered employees for suggestions
+   
+  const generatePayrollData = (employees) => {
+    return employees.map((employee) => ({
+      id: employee.id || 0,
+      name: employee.name?.trim() || '', // Fallback to "Employee X" if emp_name is missing
+      salary: employee.salary || 0,
+      status: employee.status || 'Unpaid',
+    }));
+  };
 
   const handleTabClick = (tab) => {
     setActiveTab(tab);
@@ -35,13 +52,15 @@ const SalaryPayment = () => {
     setIsModalOpen(false); // Close the modal
   };
 
-  const handleCheckboxChange = (id) => {
-    const updatedData = payrollData.map((row) =>
-      row.id === id ? { ...row, salaryToBePaid: !row.salaryToBePaid } : row
-    );
-
+  const handleCheckboxChange = (index) => {
+    const updatedData = [...payrollData];
+    updatedData[index].salaryToBePaid = !updatedData[index].salaryToBePaid;
+  
     // Update selected rows
-    const updatedSelectedRows = updatedData.filter((row) => row.salaryToBePaid);
+    const updatedSelectedRows = updatedData
+      .filter((row) => row.salaryToBePaid)
+      .map((row) => row.id);
+  
     setPayrollData(updatedData);
     setSelectedRows(updatedSelectedRows);
   };
@@ -53,8 +72,34 @@ const SalaryPayment = () => {
       return;
     }
       */
-    setIsModalOpen(true); // Open the modal
+    setIsModalOpen(true); 
   };
+
+  useEffect(() => {
+    axios
+      .get('http://localhost:5000/api/employees')
+      .then((response) => {
+        const generatedData = generatePayrollData(response.data || []);
+        setPayrollData(generatedData);
+      })
+      .catch((error) => {
+        console.error('Error fetching employee data:', error);
+        setPayrollData([]);
+      });
+  }, []);
+
+  const handleSearchChange = (e) => {
+    setSearchTerm(e.target.value); 
+  };
+
+  const filteredPayrollData = generatePayrollData(
+    (payrollData || []).filter((employee) => {
+      if (!searchTerm.trim()) {
+        return true; // Include all employees if searchTerm is empty
+      }
+      return (employee.name || '').toLowerCase().includes(searchTerm.toLowerCase());
+    })
+  );
 
   return (
     <div className="salary-payment-root">
@@ -89,6 +134,8 @@ const SalaryPayment = () => {
         </button>
       </div>
       <hr className="salary-payment-divider" />
+
+
       {activeMode === 'bulk' && (
         <div className="salary-payment-bulk">
           <div className="salary-payment-search">
@@ -97,7 +144,25 @@ const SalaryPayment = () => {
               type="text"
               className="salary-payment-search-input"
               placeholder="Search"
+              value={searchTerm}
+              onChange={handleSearchChange}
             />
+            {/*
+            {filteredEmployees.length > 0 && (
+              <ul className="salary-payment-search-suggestions">
+                {filteredEmployees.map((employee) => (
+                  <li
+                    key={employee.id}
+                    onClick={() => handleEmployeeSelect(employee)} 
+                    className="salary-payment-search-suggestion-item"
+                  >
+                    {employee.name}
+                  </li>
+                ))}
+              </ul>
+            )}
+            */}
+
           </div>
           <div className="salary-payment-filters">
             <div className="salary-payment-select-container">
@@ -137,14 +202,20 @@ const SalaryPayment = () => {
               <button className="salary-payment-download-button">Download</button>
             </div>
             <div className="salary-payment-table-wrapper">
-            <Payroll
-              data={payrollData}
-              onCheckboxChange={handleCheckboxChange}
-            />
+            {filteredPayrollData.length > 0 ? (
+              <Payroll
+                filteredPayrollData={filteredPayrollData}
+                onCheckboxChange={handleCheckboxChange}
+              />
+            ) : (
+              <p className="no-matching-employees">No matching employees found.</p> // Show message if no matches
+            )}
             </div>
           </div>
         </div>
       )}
+
+      {activeMode === 'single' && <SalaryPaymentSingle />}
 
       {isModalOpen && (
         <div className="salary-payment-modal">
