@@ -9,7 +9,6 @@ import Navbar from './NavbarFooter/Navbar';
 import AppBar from './NavbarFooter/AppBar';
 
 import PayrollReports from './NavBarItems/PayrollReports';
-import StatutoryCompliance from './NavBarItems/StatutoryCompliance';
 import Settings from './NavBarItems/Settings';
 
 import Dashboard from './Dashboard/Dashboard';
@@ -25,8 +24,10 @@ import SalaryPayment from './PayrollProcessing/SalaryPayment';
 
 import AttendanceReports from './Reports/AttendanceReports';
 import Form16 from './Reports/Form16';
-import PaySheet from './NavBarItems/PaySheet';
-import PaySlip from './NavBarItems/PaySlip';
+import PaySheet from './Reports/PaySheet';
+import PaySlip from './Reports/PaySlip';
+import StatutoryCompliance from './Reports/StatutoryCompliance';
+import TaxContinuation from './Reports/TaxContinuation';
 
 import TaskDashboard from './TaskManagement/TaskDashboard';
 import AssignTasks from './TaskManagement/AssignTasks';
@@ -44,7 +45,6 @@ function AppContent ({ handleLogout }) {
       <AppBar handleLogout={handleLogout} />
       <Routes>
         <Route path="/payroll-reports" element={<PayrollReports />} />
-        <Route path="/statutory-compliance" element={<StatutoryCompliance />} />
         <Route path="/settings" element={<Settings />} />
 
         <Route path="/" element={<Dashboard />} />
@@ -62,6 +62,8 @@ function AppContent ({ handleLogout }) {
         <Route path="/form-16" element={<Form16 />} />
         <Route path="/pay-slip" element={<PaySlip />} />
         <Route path="/pay-sheet" element={<PaySheet />} />
+        <Route path="/statutary-compliance" element={<StatutoryCompliance />} />
+        <Route path="/tax-continuation" element={<TaxContinuation />} />
 
         <Route path="/task-management" element={<TaskDashboard />} />
         <Route path="/assign-tasks" element={<AssignTasks />} />

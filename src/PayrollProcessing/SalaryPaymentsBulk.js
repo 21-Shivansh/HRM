@@ -127,6 +127,8 @@ function Payroll({ filteredPayrollData, onSelectedRowsChange }) {
       const employerLWF = lwf * 3;
       const ctc = earnGross + employerPF + employerESIC + graduity + employerLWF;
 
+      console.log('Payroll Object:', payroll);
+
       return {
         id: payroll.id || 0,
         name: payroll.name || '',
@@ -215,7 +217,7 @@ function Payroll({ filteredPayrollData, onSelectedRowsChange }) {
   const columns = [
     { header: 'Sr. No', accessor: 'id', className: 'sticky-column-left' },
     { header: 'Employee Name', accessor: 'name', className: 'sticky-column-left' },
-    { header: 'Date of Joining', accessor: 'doj' },
+    { header: 'Date of Joining', accessor: 'dateOfJoining' },
     { header: 'Days in month', accessor: 'daysInMonth' },
     { header: 'Paid Days', accessor: 'paidDays' },
     { header: 'Fixed GROSS Salary (NEW)', accessor: 'fixedGrossSalary' },

@@ -1,0 +1,114 @@
+  .tax-continuation-title {
+    font-size: 2rem;
+    margin-bottom: 20px;
+    text-align: left;
+    color: #4F378A; /* Purple color from Salary Payment */
+  }
+  
+  .tax-continuation-search {
+    position: relative;
+    margin-bottom: 20px;
+  }
+  
+  .tax-continuation-search-input {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #4F378A; /* Purple border */
+    border-radius: 4px;
+  }
+  
+  .tax-continuation-dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: white;
+    border: 1px solid #4F378A; /* Purple border */
+    border-radius: 4px;
+    max-height: 150px;
+    overflow-y: auto;
+    z-index: 10;
+  }
+  
+  .tax-continuation-dropdown-item {
+    padding: 10px;
+    font-size: 14px;
+    color: #333;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+  }
+  
+  .tax-continuation-dropdown-item:hover {
+    background-color: #f4f4f4;
+  }
+  
+  .tax-continuation-buttons {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    justify-content: left;
+  }
+  
+  .schema-button {
+    padding: 10px 20px;
+    font-size: 16px;
+    border: 1px solid #4F378A; /* Purple border */
+    border-radius: 4px;
+    cursor: pointer;
+    background-color: white;
+    color: #4F378A; /* Purple text */
+    transition: background-color 0.3s, color 0.3s;
+  }
+  
+  .schema-button.active {
+    background-color: #4F378A; /* Purple background */
+    color: white;
+  }
+  
+  .tax-continuation-filters {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    justify-content: left;
+  }
+  
+  .tax-continuation-select {
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #4F378A; /* Purple border */
+    border-radius: 4px;
+  }
+  
+  .tax-continuation-table-container {
+    margin-top: 20px;
+    overflow-x: auto;
+    border-radius: 1vw;
+  }
+  
+  .tax-continuation-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .tax-continuation-table th,
+  .tax-continuation-table td {
+    border: 1px solid #4F378A; /* Purple border */
+    padding: 10px;
+    text-align: center;
+  }
+  
+  .tax-continuation-table th {
+    background-color: #4F378A; /* Purple background */
+    color: white;
+  }
+  
+  .tax-continuation-table td {
+    background-color: #f9f9f9;
+  }
+  
+  .tax-continuation-table th:first-child,
+  .tax-continuation-table td:first-child {
+    text-align: center;
+    padding-left: 15px;
+  }
