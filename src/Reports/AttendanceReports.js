@@ -1,5 +1,5 @@
-import React, { useState, useMemo } from "react";
-import "./AttendanceReports.css";
+import React, { useState } from 'react';
+import './AttendanceReports.css';
 
 const AttendanceReports = () => {
   const employeeOptions = [
@@ -35,7 +35,7 @@ const AttendanceReports = () => {
   ];
 
   const [searchTerm, setSearchTerm] = useState("");
-  const [selectedYear, setSelectedYear] = useState("");
+  const [selectedYear, setSelectedYear] = useState("2025");
   const [selectedMonth, setSelectedMonth] = useState("January");
   const [attendanceData, setAttendanceData] = useState(
     employeeOptions.map((emp) => ({
