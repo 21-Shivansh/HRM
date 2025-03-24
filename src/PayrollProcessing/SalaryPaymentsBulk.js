@@ -1,10 +1,16 @@
-import React, { useState } from 'react';
-import './SalaryPaymentsData.css';
+import React, { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
+import './SalaryPaymentsBulk.css';
 
 function CustomTable({ columns, data, onCheckboxChange }) {
 
+  const location = useLocation();
+    const containerHeight = location.pathname === '/pay-sheet' 
+    ? { height: '60vh' } 
+    : {}; 
+
   return (
-    <div className="custom-table-container">
+    <div className="custom-table-container" style={containerHeight}>
       <table className="custom-table">
         <thead>
           <tr>
@@ -18,15 +24,15 @@ function CustomTable({ columns, data, onCheckboxChange }) {
             <tr
               key={rowIndex}
               className={`${row.status === 'Paid' ? 'row-paid' : ''} ${
-                row.salaryToBePaid ? 'row-selected' : ''
+                row.isSelected ? 'row-selected' : ''
               }`} 
             >
               {columns.map((column, colIndex) => (
                 <td key={colIndex} className={column.className}>
-                  {column.accessor === 'salaryToBePaid' ? (
+                  {column.accessor === 'isSelected' ? (
                     <input
                       type="checkbox"
-                      checked={row.salaryToBePaid}
+                      checked={row.isSelected}
                       onChange={() => onCheckboxChange(rowIndex)}
                     />
                   ) : column.accessor === 'status' ? (
@@ -49,6 +55,7 @@ function CustomTable({ columns, data, onCheckboxChange }) {
   );
 }
 
+/*
 export const payrolls = [
   { name: 'Aagam Sheth', salary: 29254, status: 'Unpaid' },
   { name: 'Avadai Marthuvar', salary: 29254, status: 'Unpaid' },
@@ -80,12 +87,15 @@ export const payrolls = [
   { name: 'SAUMYA KIRIT GALA', salary: 100000, status: 'Unpaid' },
   { name: 'Shreya Santosh Talashilkar', salary: 29454, status: 'Unpaid' },
 ];
+*/
 
+function Payroll({ filteredPayrollData, onSelectedRowsChange }) {
 
-function Payroll() {
+  const [payrollData, setPayrollData] = useState([]);
+  const [selectedRows, setSelectedRows] = useState([]); // used further, don't delete
 
-  const generatePayrollData = (payrolls) => {
-    return payrolls.map((payroll, index) => {
+  const generatePayrollData = (employees = []) => {
+    return employees.map((payroll) => {
       const daysInMonth = 31;
       const paidDays = 31;
       const fixedGrossSalary = payroll.salary;
@@ -118,8 +128,10 @@ function Payroll() {
       const ctc = earnGross + employerPF + employerESIC + graduity + employerLWF;
 
       return {
-        id: index + 1,
-        name: payroll.name,
+        id: payroll.id || 0,
+        name: payroll.name || '',
+        dateOfJoining: payroll.date_of_joining || '-',
+        salary: payroll.salary || 0,
         daysInMonth,
         paidDays,
         fixedGrossSalary: `${fixedGrossSalary}`,
@@ -152,32 +164,58 @@ function Payroll() {
         ctc: `${ctc}`,
         remark: '-',
         remark2: '-',
-        salaryToBePaid: false,
-        status: payroll.status,
+        isSelected: false,
+        status: payroll.status || 'Unpaid',
         action: '',
       };
     });
   };
 
-  const [payrollData, setPayrollData] = useState(() => generatePayrollData(payrolls));
-  const [selectedRows, setSelectedRows] = useState([]); // used in line 174
-  
-  const handleCheckboxChange = (index) => {
-    const updatedData = [...payrollData];
-    updatedData[index].salaryToBePaid = !updatedData[index].salaryToBePaid;
+  useEffect(() => {
+    setPayrollData(generatePayrollData(filteredPayrollData));
+  }, [filteredPayrollData]);
 
-    // Update selected rows
-    const updatedSelectedRows = updatedData
-      .filter((row) => row.salaryToBePaid)
-      .map((row) => row.id);
+  useEffect(() => {
+    const generatedData = generatePayrollData(filteredPayrollData);
+
+    const updatedData = generatedData.map((newRow) => {
+      const existingRow = payrollData.find((row) => row.id === newRow.id);
+      return existingRow ? { ...newRow, isSelected: existingRow.isSelected } : newRow;
+    });
 
     setPayrollData(updatedData);
-    setSelectedRows(updatedSelectedRows);
+  }, [filteredPayrollData]);
+
+  const handleCheckboxChange = (index) => {
+    const updatedData = [...payrollData];
+    const employeeId = updatedData[index].id;
+  
+    // Toggle the selection state
+    let updatedSelectedRows;
+    if (selectedRows.includes(employeeId)) {
+      updatedSelectedRows = selectedRows.filter((id) => id !== employeeId); // Remove ID if already selected
+    } else {
+      updatedSelectedRows = [...selectedRows, employeeId]; // Add ID if not selected
+    }
+  
+    // Update the isSelected property in payrollData based on selectedRows
+    updatedData.forEach((row) => {
+      row.isSelected = updatedSelectedRows.includes(row.id);
+    });
+    
+    console.log('Updated payrollData:', updatedData); // Debugging: Check isSelected updates
+  
+    setPayrollData(updatedData); // Update payrollData state
+    setSelectedRows(updatedSelectedRows); // Update selectedRows array
+    console.log('Selected Employee IDs:', updatedSelectedRows); // Debugging
+  
+    onSelectedRowsChange(updatedSelectedRows); // Notify parent component
   };
   
   const columns = [
     { header: 'Sr. No', accessor: 'id', className: 'sticky-column-left' },
     { header: 'Employee Name', accessor: 'name', className: 'sticky-column-left' },
+    { header: 'Date of Joining', accessor: 'doj' },
     { header: 'Days in month', accessor: 'daysInMonth' },
     { header: 'Paid Days', accessor: 'paidDays' },
     { header: 'Fixed GROSS Salary (NEW)', accessor: 'fixedGrossSalary' },
@@ -210,14 +248,18 @@ function Payroll() {
     { header: 'CTC', accessor: 'ctc' },
     { header: 'Remark', accessor: 'remark' },
     { header: 'Remark2', accessor: 'remark2' },
-    { header: 'Salary to be Paid', accessor: 'salaryToBePaid', className: 'sticky-column-right' },
+    { header: '', accessor: 'isSelected', className: 'sticky-column-right' },
     { header: 'Status', accessor: 'status', className: 'sticky-column-right' },
     { header: 'Action', accessor: 'action', className: 'sticky-column-right' },
   ];
 
   return (
     <div>
-      <CustomTable columns={columns} data={payrollData} onCheckboxChange={handleCheckboxChange} />
+      <CustomTable
+        columns={columns}
+        data={payrollData}
+        onCheckboxChange={handleCheckboxChange}
+      />
     </div>
   );
 }

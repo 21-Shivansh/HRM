@@ -50,7 +50,9 @@ function Navbar() {
     { title: 'Reports', icon: 'fa-chart-line', path: '/reports', links: [
       { name: 'Attendance Reports', path: '/attendance-reports' },
       { name: 'Payroll Statements', path: '/payroll-statements' },
-      { name: 'Form 16', path: '/form-16' }
+      { name: 'Form 16', path: '/form-16' },
+      { name: 'Pay Sheet', path: '/pay-sheet' },
+      { name: 'Pay Slip', path: '/pay-slip' }
     ]},
     { title: 'Task Management', icon: 'fa-tasks', path: '/task-management', links: [
       { name: 'Task Dashboard', path: '/task-management' },
