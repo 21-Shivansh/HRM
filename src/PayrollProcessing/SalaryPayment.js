@@ -36,6 +36,7 @@ const SalaryPayment = ({ showSubtitle = true, customTitle = "Salary Payment", to
       name: employee.name?.trim() || '', // Fallback to "Employee X" if emp_name is missing
       salary: employee.salary || 0,
       status: employee.status || 'Unpaid',
+      date_of_joining: employee.date_of_joining ? employee.date_of_joining.substring(0, 10) : 'XXXX-XX-XX',
     }));
   };
 

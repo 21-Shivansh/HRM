@@ -127,8 +127,6 @@ function Payroll({ filteredPayrollData, onSelectedRowsChange }) {
       const employerLWF = lwf * 3;
       const ctc = earnGross + employerPF + employerESIC + graduity + employerLWF;
 
-      console.log('Payroll Object:', payroll);
-
       return {
         id: payroll.id || 0,
         name: payroll.name || '',
