@@ -52,7 +52,9 @@ function Navbar() {
       { name: 'Payroll Statements', path: '/payroll-statements' },
       { name: 'Form 16', path: '/form-16' },
       { name: 'Pay Sheet', path: '/pay-sheet' },
-      { name: 'Pay Slip', path: '/pay-slip' }
+      { name: 'Pay Slip', path: '/pay-slip' },
+      { name: 'Statutary Compliance', path: '/statutary-compliance' },
+      { name: 'Tax Continuation', path: '/tax-continuation' }
     ]},
     { title: 'Task Management', icon: 'fa-tasks', path: '/task-management', links: [
       { name: 'Task Dashboard', path: '/task-management' },

@@ -17,7 +17,6 @@ function AppBar({ handleLogout }) {
     { title: 'Home', path: '/' },
     { title: 'Employees', path: '/employee-list' },
     { title: 'Payroll Reports', path: '/payroll-reports' },
-    { title: 'Statutory Compliance', path: '/statutory-compliance' },
     { title: 'Task Management', path: '/task-delegated' },
   ];
 
