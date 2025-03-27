@@ -5,7 +5,7 @@ const db = mysql.createConnection({
   host: process.env.DB_HOST,       // Use environment variable for host
   user: process.env.DB_USER,       // Use environment variable for user
   password: process.env.DB_PASSWORD, // Use environment variable for password
-  database: 'crm'    // Use environment variable for database name
+  database: process.env.DB_DATABASE,    // Use environment variable for database name
 });
 
 db.connect((err) => {

@@ -277,7 +277,7 @@ const StatutoryCompliance = () => {
                 checked={reportTypes.tds}
                 onChange={() => handleReportTypeChange('tds')}
               />
-              TDS Report
+              Annual CTC Report
             </label>
             <label>
               <input

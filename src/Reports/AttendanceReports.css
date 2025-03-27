@@ -96,9 +96,11 @@
   width: fit-content;
   background: white;
   border-radius: 10px;
-  padding: 20px;
+  padding: 0px 20px 20px 20px;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
   display: flex;
+  height: 55vh;
+  overflow-y: scroll;
 }
 
 .attendance-table h2 {
@@ -152,4 +154,18 @@
   .filters select {
     width: 100%;
   }
+}
+.unpaid-leave-input{
+  border: none;
+  text-align: center;
+  font-family: Arial, Helvetica, sans-serif;
+  font-weight: bold;
+  color: #5e5e5e;
+  height: 25px;
+  font-size: 18px;
+  width: 40px;
+}
+.table-head{
+  position: sticky;
+  top: 0;
 }

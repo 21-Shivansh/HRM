@@ -20,7 +20,7 @@ app.get('/api/employees', (req, res) => {
 
 // Route to add a payment
 app.post('/api/payments', (req, res) => {
-  const { paid_amount, bank_name, utr, status, employee_id, date } = req.body; // Extract data from the request body
+  const { paid_amount, bank_name, utr, status, employee_id, date } = req.body;
   
   const insertPaymentSql = 'INSERT INTO payments (paid_amount_, bank_name, utr, status, employee_id) VALUES (?, ?, ?, ?, ?)';
   const updateEmployeeStatusSql = 'UPDATE emp_data SET status = ? WHERE id = ?';
@@ -42,6 +42,21 @@ app.post('/api/payments', (req, res) => {
       console.log('Employee Status Updated:', updateResult);
       res.status(201).send('Payment added and employee status updated successfully');
     });
+  });
+});
+
+// New Route: Update Unpaid Leaves
+app.put('/api/employees/unpaid-leaves', (req, res) => {
+  const { employee_id, unpaid_leaves } = req.body;
+  const updateLeavesSql = 'UPDATE emp_data SET unpaid_leaves = ? WHERE id = ?';
+
+  db.query(updateLeavesSql, [unpaid_leaves, employee_id], (err, result) => {
+    if (err) {
+      console.error('Database Error (Update Unpaid Leaves):', err);
+      return res.status(500).send(err);
+    }
+
+    res.status(200).send('Unpaid leaves updated successfully');
   });
 });
 
