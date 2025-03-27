@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import html2pdf from 'html2pdf.js'; // Import the library
 import './StatutoryCompliance.css';
+import PaySlip from './PaySlip';
+import ReactDOM from 'react-dom';
+import { BrowserRouter } from 'react-router-dom';
 
 const StatutoryCompliance = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -64,13 +68,46 @@ const StatutoryCompliance = () => {
   };
 
   const handleSave = () => {
-    alert('Saving the selected reports');
-    // Add logic for saving data
+    alert('Save functionality is not implemented yet.');
+    // Add logic to save the current state or data
   };
 
   const handleDownload = () => {
-    alert(`Downloading as ${exportFormat.toUpperCase()}`);
-    // Add logic for downloading data
+    if (exportFormat === 'pdf') {
+      // Dynamically create a container for the Pay Slip
+      const tempElement = document.createElement('div');
+      document.body.appendChild(tempElement);
+  
+      // Render the Pay Slip component into the temporary container
+      ReactDOM.render(
+        <BrowserRouter>
+          <PaySlip employee={selectedEmployee} year={year} month={month} />
+        </BrowserRouter>,
+        tempElement
+      );
+  
+      // Configure the PDF options
+      const options = {
+        margin: 1,
+        filename: `PaySlip_${selectedEmployee?.name || 'Employee'}.pdf`,
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 2 },
+        jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' },
+      };
+  
+      // Generate and download the PDF
+      html2pdf()
+        .set(options)
+        .from(tempElement)
+        .save()
+        .then(() => {
+          // Clean up the temporary container after the PDF is generated
+          ReactDOM.unmountComponentAtNode(tempElement);
+          document.body.removeChild(tempElement);
+        });
+    } else {
+      alert('Only PDF export is supported for now.');
+    }
   };
 
   return (
