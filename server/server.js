@@ -6,10 +6,37 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Route to fetch employees
+// Ensure the employee_leaves table exists
+const createLeavesTable = `
+  CREATE TABLE IF NOT EXISTS employee_leaves (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    employee_id INT NOT NULL,
+    month VARCHAR(20) NOT NULL,
+    year INT NOT NULL,
+    availed_leaves INT DEFAULT 0,
+    add_on_leaves INT DEFAULT 0,
+    unpaid_leaves INT DEFAULT 0,
+    FOREIGN KEY (employee_id) REFERENCES emp_data(id) ON DELETE CASCADE
+  )
+`;
+db.query(createLeavesTable, (err) => {
+  if (err) console.error('Error creating employee_leaves table:', err);
+});
+
+// Fetch employees along with their leaves for the selected month
 app.get('/api/employees', (req, res) => {
-  const sql = 'SELECT * FROM emp_data';
-  db.query(sql, (err, result) => {
+  const { month, year } = req.query;
+
+  const sql = `
+    SELECT e.id, e.name, e.salary, COALESCE(l.unpaid_leaves, 0) AS unpaid_leaves, 
+           COALESCE(l.availed_leaves, 0) AS availed_leaves, 
+           COALESCE(l.add_on_leaves, 0) AS add_on_leaves
+    FROM emp_data e
+    LEFT JOIN employee_leaves l 
+      ON e.id = l.employee_id AND l.month = ? AND l.year = ?
+  `;
+
+  db.query(sql, [month, year], (err, result) => {
     if (err) {
       console.error('Database Error:', err);
       return res.status(500).send(err);
@@ -18,11 +45,33 @@ app.get('/api/employees', (req, res) => {
   });
 });
 
+// Route to update employee leaves
+app.put('/api/employees/update-leaves', (req, res) => {
+  const { employee_id, month, year, availed_leaves, add_on_leaves, unpaid_leaves } = req.body;
+
+  const updateLeavesSql = `
+    INSERT INTO employee_leaves (employee_id, month, year, availed_leaves, add_on_leaves, unpaid_leaves)
+    VALUES (?, ?, ?, ?, ?, ?)
+    ON DUPLICATE KEY UPDATE 
+      availed_leaves = VALUES(availed_leaves),
+      add_on_leaves = VALUES(add_on_leaves),
+      unpaid_leaves = VALUES(unpaid_leaves)
+  `;
+
+  db.query(updateLeavesSql, [employee_id, month, year, availed_leaves, add_on_leaves, unpaid_leaves], (err, result) => {
+    if (err) {
+      console.error('SQL Error:', err.sqlMessage);
+      return res.status(500).send(err);
+    }
+    res.status(200).send('Employee leave data updated successfully');
+  });
+});
+
 // Route to add a payment
 app.post('/api/payments', (req, res) => {
   const { paid_amount, bank_name, utr, status, employee_id, date } = req.body;
-  
-  const insertPaymentSql = 'INSERT INTO payments (paid_amount_, bank_name, utr, status, employee_id) VALUES (?, ?, ?, ?, ?)';
+
+  const insertPaymentSql = 'INSERT INTO payments (paid_amount, bank_name, utr, status, employee_id, date) VALUES (?, ?, ?, ?, ?, ?)';
   const updateEmployeeStatusSql = 'UPDATE emp_data SET status = ? WHERE id = ?';
 
   db.query(insertPaymentSql, [paid_amount, bank_name, utr, status || 'Paid', employee_id, date], (err, result) => {
@@ -31,32 +80,14 @@ app.post('/api/payments', (req, res) => {
       return res.status(500).send(err);
     }
 
-    console.log('Payment Added:', result);
-
     db.query(updateEmployeeStatusSql, ['Paid', employee_id], (err, updateResult) => {
       if (err) {
         console.error('Database Error (Update Employee Status):', err);
         return res.status(500).send(err);
       }
 
-      console.log('Employee Status Updated:', updateResult);
       res.status(201).send('Payment added and employee status updated successfully');
     });
-  });
-});
-
-// New Route: Update Unpaid Leaves
-app.put('/api/employees/unpaid-leaves', (req, res) => {
-  const { employee_id, unpaid_leaves } = req.body;
-  const updateLeavesSql = 'UPDATE emp_data SET unpaid_leaves = ? WHERE id = ?';
-
-  db.query(updateLeavesSql, [unpaid_leaves, employee_id], (err, result) => {
-    if (err) {
-      console.error('Database Error (Update Unpaid Leaves):', err);
-      return res.status(500).send(err);
-    }
-
-    res.status(200).send('Unpaid leaves updated successfully');
   });
 });
 

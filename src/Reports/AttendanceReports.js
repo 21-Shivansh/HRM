@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { FaDownload } from 'react-icons/fa';
 import './AttendanceReports.css';
 
@@ -7,6 +7,7 @@ const AttendanceReports = () => {
   const [selectedYear, setSelectedYear] = useState('2025');
   const [selectedMonth, setSelectedMonth] = useState('January');
   const [attendanceData, setAttendanceData] = useState([]);
+  const [prevAddOnLeaves, setPrevAddOnLeaves] = useState({});
 
   const months = [
     'January', 'February', 'March', 'April', 'May', 'June',
@@ -26,53 +27,100 @@ const AttendanceReports = () => {
     try {
       const response = await fetch('http://localhost:5000/api/employees');
       const data = await response.json();
-      setAttendanceData(data.map(emp => ({ ...emp, unpaidLeaves: emp.unpaid_leaves || 0 })));
+      setAttendanceData(data.map(emp => ({
+        ...emp,
+        unpaidLeaves: emp.unpaid_leaves || 0,
+        availedLeaves: 0,
+        addOnLeaves: prevAddOnLeaves[emp.id] || 0,
+      })));
     } catch (error) {
       console.error('Error fetching employees:', error);
     }
   };
 
-  useState(() => {
+  useEffect(() => {
     fetchEmployees();
-  }, []);
+  }, [selectedMonth]);
 
   const calculatePayable = (emp) => {
     const daysInMonth = getDaysInMonth(selectedMonth, selectedYear);
     const dailySalary = emp.salary / daysInMonth;
-    const extraUnpaid = Math.max(emp.unpaidLeaves - 2, 0);
-    return emp.salary - extraUnpaid * dailySalary;
+    return emp.salary - Math.max(emp.unpaidLeaves, 0) * dailySalary;
   };
 
-  const filteredEmployees = useMemo(() => {
-    return attendanceData.filter((emp) =>
-      emp.name.toLowerCase().includes(searchTerm.trim().toLowerCase())
+  const calculateAddOnLeaves = (emp) => {
+    return (prevAddOnLeaves[emp.id] || 0) + (2 - emp.availedLeaves);
+  };
+
+  const handleAvailedLeaveChange = (id, value) => {
+    const newValue = Math.min(Math.max(parseInt(value) || 0, 0), 2);
+    const updatedEmployee = attendanceData.find(emp => emp.id === id);
+    if (!updatedEmployee) return;
+  
+    setAttendanceData(prevData =>
+      prevData.map(emp =>
+        emp.id === id ? { ...emp, availedLeaves: newValue, addOnLeaves: calculateAddOnLeaves(emp) } : emp
+      )
     );
-  }, [attendanceData, searchTerm]);
+  
+    updateEmployeeLeaves(id, newValue, calculateAddOnLeaves(updatedEmployee), updatedEmployee.unpaidLeaves);
+  };
 
-  const handleUnpaidLeaveChange = async (id, value) => {
+  const updateEmployeeLeaves = async (id, availedLeaves, addOnLeaves, unpaidLeaves) => {
+    try {
+      const response = await fetch('http://localhost:5000/api/employees/update-leaves', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          employee_id: id,
+          month: selectedMonth,
+          year: selectedYear,
+          availed_leaves: availedLeaves,
+          add_on_leaves: addOnLeaves,
+          unpaid_leaves: unpaidLeaves
+        }),
+      });
+  
+      if (!response.ok) throw new Error('Failed to update leaves');
+      console.log('Leave data updated successfully');
+    } catch (error) {
+      console.error('Error updating leaves:', error);
+    }
+  };
+  
+
+  const handleUnpaidLeaveChange = (id, value) => {
+    const emp = attendanceData.find(emp => emp.id === id);
+    if (!emp) return;
     const daysInMonth = getDaysInMonth(selectedMonth, selectedYear);
-    const newValue = Math.min(Math.max(parseInt(value) || 0, 0), daysInMonth);
-
-    setAttendanceData((prevData) =>
-      prevData.map((emp) =>
+    const maxUnpaidLeaves = daysInMonth - (2 + emp.addOnLeaves);
+    const newValue = Math.min(Math.max(parseInt(value) || 0, 0), maxUnpaidLeaves);
+  
+    setAttendanceData(prevData =>
+      prevData.map(emp =>
         emp.id === id ? { ...emp, unpaidLeaves: newValue } : emp
       )
     );
-
-    try {
-      const response = await fetch('http://localhost:5000/api/employees/unpaid-leaves', {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ employee_id: id, unpaid_leaves: newValue }),
-      });
-
-      if (!response.ok) {
-        console.error('Failed to update unpaid leaves in the database');
-      }
-    } catch (error) {
-      console.error('Error updating unpaid leaves:', error);
-    }
+  
+    updateEmployeeLeaves(id, emp.availedLeaves, emp.addOnLeaves, newValue);
   };
+
+  useEffect(() => {
+    const newPrevAddOnLeaves = {};
+    attendanceData.forEach(emp => {
+      newPrevAddOnLeaves[emp.id] = calculateAddOnLeaves(emp);
+    });
+    setPrevAddOnLeaves(newPrevAddOnLeaves);
+  }, [selectedMonth]);
+
+  const filteredEmployees = useMemo(() => {
+    return attendanceData.map((emp) => ({
+      ...emp,
+      addOnLeaves: prevAddOnLeaves[emp.id] || 0
+    })).filter((emp) =>
+      emp.name.toLowerCase().includes(searchTerm.trim().toLowerCase())
+    );
+  }, [attendanceData, searchTerm, prevAddOnLeaves]);
 
   return (
     <div className="attendance-container">
@@ -101,7 +149,6 @@ const AttendanceReports = () => {
           onChange={(e) => setSelectedYear(e.target.value)}
           className="year-dropdown"
         >
-          <option value="" disabled>YEAR</option>
           {years.map((year) => (
             <option key={year} value={year}>{year}</option>
           ))}
@@ -129,6 +176,8 @@ const AttendanceReports = () => {
                 <th>Employee Name</th>
                 <th>Days in Month</th>
                 <th>Paid Leaves</th>
+                <th>Availed Leaves</th>
+                <th>Add-on Leaves</th>
                 <th>Unpaid Leaves</th>
                 <th>Present Days</th>
                 <th>Payable Amount</th>
@@ -140,6 +189,17 @@ const AttendanceReports = () => {
                   <td>{emp.name}</td>
                   <td>{getDaysInMonth(selectedMonth, selectedYear)}</td>
                   <td>2</td>
+                  <td>
+                    <input
+                      type="number"
+                      value={emp.availedLeaves}
+                      onChange={(e) => handleAvailedLeaveChange(emp.id, e.target.value)}
+                      min="0"
+                      max="2"
+                      className="unpaid-leave-input"
+                    />
+                  </td>
+                  <td>{emp.addOnLeaves}</td>
                   <td>
                     <input
                       type="number"
