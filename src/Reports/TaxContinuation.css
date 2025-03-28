@@ -21,7 +21,7 @@
     transition: background-color 0.3s;
   }
 
-  .tax-continuation-buttons button .active {
+  .tax-continuation-buttons button.active {
     background-color: #4F378A; /* Purple background */
     color: white;
   }

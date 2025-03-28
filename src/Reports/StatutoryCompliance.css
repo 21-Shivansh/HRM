@@ -19,18 +19,7 @@
 }
 
 .statutory-compliance-dropdown {
-  position: absolute;
-  left: 0;
-  right: 0;
-  background: white;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  max-height: 150px;
-  overflow-y: auto;
-  z-index: 10;
   margin-bottom: 2vh;
-  position: relative;
-  z-index: 10;
 }
 
 .statutory-compliance-dropdown-item {
@@ -119,12 +108,13 @@
 
 /* Preview Section */
 .statutory-compliance-preview {
-  width: 65%;
+  width: 75%;
+  height: 75vh;
   padding: 20px;
   border: 1px solid #ccc;
   border-radius: 8px;
   background-color: #f9f9f9;
-  font-family: Arial, sans-serif;
+  overflow: auto;
 }
 
 .statutory-compliance-preview h2 {
@@ -150,13 +140,14 @@
 }
 
 .statutory-compliance-left {
-  width: 30%;
+  width: 20%;
 }
 
 .statutory-compliance-table {
   width: 100%;
   border-collapse: collapse;
   margin-top: 10px;
+  font-size: 0.8rem;
 }
 
 .statutory-compliance-table th,
@@ -169,4 +160,15 @@
 .statutory-compliance-table th {
   background-color: #f4f4f4;
   font-weight: bold;
+}
+
+.statutory-compliance-options {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.statutory-compliance-options label {
+  font-size: 14px;
+  cursor: pointer;
 }
