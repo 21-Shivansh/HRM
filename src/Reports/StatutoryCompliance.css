@@ -20,7 +20,6 @@
 
 .statutory-compliance-dropdown {
   position: absolute;
-  top: 100%;
   left: 0;
   right: 0;
   background: white;
@@ -28,6 +27,9 @@
   border-radius: 4px;
   max-height: 150px;
   overflow-y: auto;
+  z-index: 10;
+  margin-bottom: 2vh;
+  position: relative;
   z-index: 10;
 }
 
@@ -48,10 +50,15 @@
 }
 
 .statutory-compliance-select {
+  width: 100%; /* Ensure the dropdown spans the container width */
   padding: 10px;
   font-size: 16px;
   border: 1px solid #ccc;
   border-radius: 4px;
+  background-color: #fff; /* Ensure the background is visible */
+  color: #333; /* Ensure the text is visible */
+  appearance: none; /* Remove default browser styling */
+  cursor: pointer;
 }
 
 /* Employee Section */
@@ -112,7 +119,7 @@
 
 /* Preview Section */
 .statutory-compliance-preview {
-  width: 35%;
+  width: 65%;
   padding: 20px;
   border: 1px solid #ccc;
   border-radius: 8px;
@@ -143,5 +150,23 @@
 }
 
 .statutory-compliance-left {
-  width: 60%;
+  width: 30%;
+}
+
+.statutory-compliance-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+.statutory-compliance-table th,
+.statutory-compliance-table td {
+  border: 1px solid #ccc;
+  padding: 8px;
+  text-align: center;
+}
+
+.statutory-compliance-table th {
+  background-color: #f4f4f4;
+  font-weight: bold;
 }

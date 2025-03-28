@@ -89,16 +89,16 @@ export const payrolls = [
 ];
 */
 
-function Payroll({ filteredPayrollData, onSelectedRowsChange }) {
+function Payroll({ month, year, filteredPayrollData, onSelectedRowsChange }) {
 
   const [payrollData, setPayrollData] = useState([]);
   const [selectedRows, setSelectedRows] = useState([]); // used further, don't delete
 
   const generatePayrollData = (employees = []) => {
     return employees.map((payroll) => {
-      const daysInMonth = 31;
-      const paidDays = 31;
-      const fixedGrossSalary = payroll.salary;
+      const daysInMonth = new Date(year, new Date(Date.parse(month + " 1")).getMonth() + 1, 0).getDate();
+      const paidDays = daysInMonth - (payroll.unpaid_leaves || 0);
+      const fixedGrossSalary = (payroll.salary / 12) * paidDays;
       const basicDA = Math.round(payroll.salary * 0.5);
       const hra = Math.round(basicDA * 0.5);
       const conveyance = 1200;

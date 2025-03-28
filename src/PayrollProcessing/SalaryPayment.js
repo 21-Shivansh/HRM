@@ -37,6 +37,7 @@ const SalaryPayment = ({ showSubtitle = true, customTitle = "Salary Payment", to
       salary: employee.salary || 0,
       status: employee.status || 'Unpaid',
       date_of_joining: employee.date_of_joining ? employee.date_of_joining.substring(0, 10) : 'XXXX-XX-XX',
+      unpaid_leaves: employee.unpaid_leaves || 0,
     }));
   };
 
@@ -276,6 +277,8 @@ const SalaryPayment = ({ showSubtitle = true, customTitle = "Salary Payment", to
             <div className="salary-payment-table-wrapper" style={{ height: containerHeight }}>
             {filteredPayrollData.length > 0 ? (
               <Payroll
+                month={month}
+                year={year}
                 filteredPayrollData={filteredPayrollData}
                 onSelectedRowsChange={handleSelectedRowsChange}
               />
@@ -350,7 +353,7 @@ const SalaryPayment = ({ showSubtitle = true, customTitle = "Salary Payment", to
 
           {/* Display Selected Employee Details */}
           {selectedEmployee ? (
-            <SalaryPaymentSingle employee={selectedEmployee} divBox={divActions}/>
+            <SalaryPaymentSingle employee={selectedEmployee} divBox={divActions} month={month} year={year}/>
           ) : (
             <p>Please select an employee to view details.</p>
           )}
