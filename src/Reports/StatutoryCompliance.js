@@ -11,14 +11,8 @@ const StatutoryCompliance = () => {
   const [selectedEmployee, setSelectedEmployee] = useState(null);
   const [year, setYear] = useState('Year');
   const [month, setMonth] = useState('Month');
-  const [reportTypes, setReportTypes] = useState({
-    pf: false,
-    esi: false,
-    pt: false,
-    tds: false,
-    gratuity: false,
-  });
-  const [exportFormat, setExportFormat] = useState('pdf'); // Default export format
+  const [reportTypes, setReportTypes] = useState('Click here to select');
+  const [exportFormat, setExportFormat] = useState('pdf'); 
 
   useEffect(() => {
     // Fetch employee data from the backend
@@ -32,6 +26,7 @@ const StatutoryCompliance = () => {
       });
   }, []);
 
+  /*
   const handleSearchChange = (e) => {
     const term = e.target.value;
     setSearchTerm(term);
@@ -46,6 +41,7 @@ const StatutoryCompliance = () => {
     );
     setFilteredEmployees(filtered);
   };
+  */
 
   const handleEmployeeSelect = (employee) => {
     setSearchTerm(employee.name);
@@ -56,32 +52,16 @@ const StatutoryCompliance = () => {
     setSelectedEmployee({ ...employee, ...payrollData });
   };
 
-  const handleReportTypeChange = (type) => {
-    setReportTypes((prev) => ({
-      ...prev,
-      [type]: !prev[type],
-    }));
-  };
-
-  const handleExport = () => {
-    alert(`Exporting as ${exportFormat.toUpperCase()}`);
-    // Add logic for exporting data
-  };
-
   const handleSave = () => {
     alert('Saving the selected reports');
     // Add logic for saving data
   };
 
   const handleDownload = () => {
-    if (!selectedEmployee) {
-      alert('Please select an employee before downloading.');
-      return;
-    }
 
     const isAnyReportTypeSelected = Object.values(reportTypes).some((isSelected) => isSelected);
     if (!isAnyReportTypeSelected) {
-      alert('Please select at least one report type (e.g., PF, ESI, PT, TDS, Gratuity).');
+      alert('Please select any one report type (e.g., PF, ESI, PT, CTC, Gratuity).');
       return;
     }
 
@@ -101,7 +81,7 @@ const StatutoryCompliance = () => {
   
       const options = {
         margin: 1,
-        filename: `Statutory_Compliance_${selectedEmployee.name || 'Employee'}.pdf`,
+        filename: `Statutory_Compliance_${reportTypes}.pdf`,
         image: { type: 'jpeg', quality: 0.98 },
         html2canvas: { scale: 2 },
         jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' },
@@ -123,7 +103,7 @@ const StatutoryCompliance = () => {
       const data = [];
 
       // Add header row
-      data.push(['Employee Name', 'Year', 'Month', 'PF', 'ESI', 'PT', 'TDS', 'Gratuity']);
+      data.push(['Employee Name', 'Year', 'Month', 'PF', 'ESI', 'PT', 'CTC', 'Gratuity']);
 
       // Add data row
       data.push([
@@ -133,7 +113,7 @@ const StatutoryCompliance = () => {
         reportTypes.pf ? selectedEmployee?.pf || 'N/A' : 'N/A',
         reportTypes.esi ? selectedEmployee?.esi || 'N/A' : 'N/A',
         reportTypes.pt ? selectedEmployee?.pt || 'N/A' : 'N/A',
-        reportTypes.tds ? selectedEmployee?.tds || 'N/A' : 'N/A',
+        reportTypes.ctc ? selectedEmployee?.ctc || 'N/A' : 'N/A',
         reportTypes.gratuity ? selectedEmployee?.gratuity || 'N/A' : 'N/A',
       ]);
 
@@ -165,15 +145,20 @@ const StatutoryCompliance = () => {
     const earnOtherAllo = Math.round((otherAllowance / daysInMonth) * paidDays);
     const earnGross = earnBasic + earnHRA + earnConveyance + earnMedicalAllow + earnOtherAllo;
     const pfWages = earnGross - earnHRA;
-  
-    // Calculate the required fields
     const pf = Math.round(pfWages >= 15000 ? 1800 : pfWages * 0.12); // PF
+    const employerPF = Math.round(pf);
+    const employerESIC = Math.ceil(gross >= 21001 ? 0 : earnGross * 0.0325);
+    const graduity = Math.round(earnBasic * 0.0481) + 1;
+    const lwf = 25;
+    const employerLWF = lwf * 3;
+         
+    // Calculate the required fields
     const esic = Math.ceil(gross >= 21001 ? 0 : earnGross * 0.0075); // ESI
     const pt = 200; // PT
-    const tds = 0; // Assuming TDS is not calculated here, set to 0 or add logic if needed
+    const ctc = earnGross + employerPF + employerESIC + graduity + employerLWF;
     const gratuity = Math.round(earnBasic * 0.0481) + 1; // Gratuity
   
-    return { pf, esic, pt, tds, gratuity };
+    return { pf, esic, pt, ctc, gratuity };
   };
 
   return (
@@ -181,6 +166,7 @@ const StatutoryCompliance = () => {
       <h1 className="statutory-compliance-title">Statutory Compliance</h1>
 
       {/* Search Bar */}
+      {/*
       <div className="statutory-compliance-search">
             <input
               type="text"
@@ -203,6 +189,7 @@ const StatutoryCompliance = () => {
               </ul>
             )}
           </div>
+          */}
   
       <div className="statutory-compliance-content">
         {/* Left Section: Existing Content */}
@@ -246,52 +233,25 @@ const StatutoryCompliance = () => {
           )}
   
           {/* Checkboxes for Report Types */}
-          <div className="statutory-compliance-checkboxes">
-            <label>
-              <input
-                type="checkbox"
-                checked={reportTypes.pf}
-                onChange={() => handleReportTypeChange('pf')}
-              />
-              PF Report
-            </label>
-            <label>
-              <input
-                type="checkbox"
-                checked={reportTypes.esi}
-                onChange={() => handleReportTypeChange('esi')}
-              />
-              ESI Report
-            </label>
-            <label>
-              <input
-                type="checkbox"
-                checked={reportTypes.pt}
-                onChange={() => handleReportTypeChange('pt')}
-              />
-              PT Report
-            </label>
-            <label>
-              <input
-                type="checkbox"
-                checked={reportTypes.tds}
-                onChange={() => handleReportTypeChange('tds')}
-              />
-              Annual CTC Report
-            </label>
-            <label>
-              <input
-                type="checkbox"
-                checked={reportTypes.gratuity}
-                onChange={() => handleReportTypeChange('gratuity')}
-              />
-              Gratuity Report
-            </label>
+          <div className="statutory-compliance-dropdown">
+            <label htmlFor="reportTypeSelect">Select Report Type:</label>
+            <select
+              id="reportTypeSelect"
+              className="statutory-compliance-select"
+              value={reportTypes}
+              onChange={(e) => setReportTypes(e.target.value)} // Update report type
+            >
+              <option value="pf">PF Report</option>
+              <option value="esi">ESI Report</option>
+              <option value="pt">PT Report</option>
+              <option value="ctc">Annual CTC Report</option>
+              <option value="gratuity">Gratuity Report</option>
+            </select>
           </div>
   
-          {/* Buttons */}
+          {/* Buttons */}8
           <div className="statutory-compliance-buttons">
-            <button className="purple-button" onClick={handleExport}>
+            <button className="purple-button" >
               Export As
             </button>
             <button className="white-button" onClick={handleSave}>
@@ -332,64 +292,90 @@ const StatutoryCompliance = () => {
         {/* Right Section: Preview */}
         <div className="statutory-compliance-preview">
           <h2>Statutory Compliance</h2>
-          <p><strong>Employee Name:</strong> {selectedEmployee?.name || '_________'}</p>
-          <p><strong>Year:</strong> {year || '_________'}</p>
-          <p><strong>Month:</strong> {month || '_________'}</p>
-          <hr />
-          <h3>Selected Report(s)</h3>
-
-          {exportFormat === 'pdf' ? (
-            // PDF Preview
-            <ul>
-              {reportTypes.pf && <li><strong>PF:</strong> {selectedEmployee?.pf || 'N/A'}</li>}
-              {reportTypes.esi && <li><strong>ESI:</strong> {selectedEmployee?.esi || 'N/A'}</li>}
-              {reportTypes.pt && <li><strong>PT:</strong> {selectedEmployee?.pt || 'N/A'}</li>}
-              {reportTypes.tds && <li><strong>TDS:</strong> {selectedEmployee?.tds || 'N/A'}</li>}
-              {reportTypes.gratuity && <li><strong>Gratuity:</strong> {selectedEmployee?.gratuity || 'N/A'}</li>}
-            </ul>
+          {/* selectedEmployee ? (
+            <>
+              <p><strong>Employee Name:</strong> {selectedEmployee?.name || '_________'}</p>
+              <p><strong>Year:</strong> {year || '_________'}</p>
+              <p><strong>Month:</strong> {month || '_________'}</p>
+              <hr />
+              <h3>Selected Report(s)</h3>
+              <table className="statutory-compliance-table">
+                <thead>
+                  <tr>
+                    <th>Report Type</th>
+                    <th>Value</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {reportTypes === 'pf' && (
+                    <tr>
+                      <td>PF</td>
+                      <td>{selectedEmployee?.pf || 'N/A'}</td>
+                    </tr>
+                  )}
+                  {reportTypes === 'esi' && (
+                    <tr>
+                      <td>ESI</td>
+                      <td>{selectedEmployee?.esi || 'N/A'}</td>
+                    </tr>
+                  )}
+                  {reportTypes === 'pt' && (
+                    <tr>
+                      <td>PT</td>
+                      <td>{selectedEmployee?.pt || 'N/A'}</td>
+                    </tr>
+                  )}
+                  {reportTypes === 'ctc' && (
+                    <tr>
+                      <td>CTC</td>
+                      <td>{selectedEmployee?.ctc || 'N/A'}</td>
+                    </tr>
+                  )}
+                  {reportTypes === 'gratuity' && (
+                    <tr>
+                      <td>Gratuity</td>
+                      <td>{selectedEmployee?.gratuity || 'N/A'}</td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+            </>
           ) : (
-            // Excel Table Preview
-            <table className="statutory-compliance-table">
-              <thead>
-                <tr>
-                  <th>Report Type</th>
-                  <th>Value</th>
-                </tr>
-              </thead>
-              <tbody>
-                {reportTypes.pf && (
+            <> */}
+              <h3>All Employees {reportTypes.toLocaleUpperCase()} Report</h3>
+              <table className="statutory-compliance-table">
+                <thead>
                   <tr>
-                    <td>PF</td>
-                    <td>{selectedEmployee?.pf || 'N/A'}</td>
+                    <th>Employee Name</th>
+                    {['Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec', 'Jan', 'Feb', 'Mar', 'Total'].map(
+                      (month) => (
+                        <th key={month}>{month}</th>
+                      )
+                    )}
                   </tr>
-                )}
-                {reportTypes.esi && (
-                  <tr>
-                    <td>ESI</td>
-                    <td>{selectedEmployee?.esi || 'N/A'}</td>
-                  </tr>
-                )}
-                {reportTypes.pt && (
-                  <tr>
-                    <td>PT</td>
-                    <td>{selectedEmployee?.pt || 'N/A'}</td>
-                  </tr>
-                )}
-                {reportTypes.tds && (
-                  <tr>
-                    <td>TDS</td>
-                    <td>{selectedEmployee?.tds || 'N/A'}</td>
-                  </tr>
-                )}
-                {reportTypes.gratuity && (
-                  <tr>
-                    <td>Gratuity</td>
-                    <td>{selectedEmployee?.gratuity || 'N/A'}</td>
-                  </tr>
-                )}
-              </tbody>
-            </table>
-          )}
+                </thead>
+                <tbody>
+                  {employees.map((employee) => {
+                    
+                    const value = employee[reportTypes] || 'N/A'; 
+                    const total = value !== 'N/A' ? value * 12 : 'N/A'; 
+                    console.log('Selected Report Type:', reportTypes);
+                    console.log('Employees Data:', employees);
+
+                    return (
+                      <tr key={employee.id}>
+                        <td>{employee.name}</td>
+                        {['Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec', 'Jan', 'Feb', 'Mar'].map((month) => (
+                          <td key={month}>{value}</td> // Display the selected report type
+                        ))}
+                        <td>{total}</td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            {/* </div></>
+          )} */}
         </div>
       </div>
     </div>

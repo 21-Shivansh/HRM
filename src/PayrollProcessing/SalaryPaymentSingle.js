@@ -5,7 +5,7 @@ import { FaDownload, FaEdit, FaTrash } from 'react-icons/fa'; // Importing icons
 import "./SalaryPaymentSingle.css";
 import { height } from "@mui/system";
 
-const SalaryPaymentSingle = ({ employee, divBox=true }) => {
+const SalaryPaymentSingle = ({ employee, month, year, divBox=true }) => {
   const [isPopupVisible, setPopupVisible] = useState(false);
   const [calculatedData, setCalculatedData] = useState(null);
 
@@ -14,11 +14,11 @@ const SalaryPaymentSingle = ({ employee, divBox=true }) => {
   };
 
   useEffect(() => {
-    if (employee) {
+    if (employee && month && year) {
       
       // Perform calculations based on the formulas
-      const daysInMonth = 31;
-      const paidDays = employee.paidDays || 31;
+      const daysInMonth = new Date(year, new Date(Date.parse(month + " 1")).getMonth() + 1, 0).getDate();
+      const paidDays = daysInMonth - employee.unpaid_leaves;
       const grossSalary = employee.salary || 0;
 
       // Calculations
@@ -182,7 +182,7 @@ const SalaryPaymentSingle = ({ employee, divBox=true }) => {
                   <h3>{calculatedData ? calculatedData.netPayable.toFixed(2) : "0.00"}</h3>
                   <p>Employee Net Pay</p>
                   <p>Paid Days: {employee.paidDays || 31}</p>
-                  <p>Leave: {employee.leaveDays || 0}</p>
+                  <p>Leave: {employee.paid_leaves + employee.unpaid_leaves || 0}</p>
               </div>
             </div>
           
@@ -205,7 +205,7 @@ const SalaryPaymentSingle = ({ employee, divBox=true }) => {
                           <td>Basic</td>
                           <td>{calculatedData.earnBasic}</td>
                           <td>Leaves</td>
-                          <td>XXX</td>
+                          <td>{employee.paid_leaves + employee.unpaid_leaves}</td>
                         </tr>
                         <tr>
                           <td>Conveyance Allowance</td>
