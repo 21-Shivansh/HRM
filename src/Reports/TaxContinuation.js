@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import TaxOldScheme from './TaxOldScheme';
 import TaxNewScheme from './TaxNewScheme';
+import TaxSchemeComparison from './TaxSchemeComparison';
 import './TaxContinuation.css';
 
 const TaxContinuation = () => {
@@ -70,6 +71,12 @@ const TaxContinuation = () => {
         >
           New Scheme
         </button>
+        <button
+          className={activeScheme === 'comparison' ? 'active' : ''}
+          onClick={() => setActiveScheme('comparison')}
+        >
+          Comparison
+        </button>
       </div>
 
       {/* Search Bar */}
@@ -127,6 +134,7 @@ const TaxContinuation = () => {
       {/* Load data for the active scheme */}
       {activeScheme === 'old' && <TaxOldScheme setTableData={setTableData} />}
       {activeScheme === 'new' && <TaxNewScheme setTableData={setTableData} />}
+      {activeScheme === 'comparison' && <TaxSchemeComparison setTableData={setTableData} />}
     </div>
   );
 };

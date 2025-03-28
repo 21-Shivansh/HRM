@@ -98,7 +98,7 @@ function Payroll({ month, year, filteredPayrollData, onSelectedRowsChange }) {
     return employees.map((payroll) => {
       const daysInMonth = new Date(year, new Date(Date.parse(month + " 1")).getMonth() + 1, 0).getDate();
       const paidDays = daysInMonth - (payroll.unpaid_leaves || 0);
-      const fixedGrossSalary = (payroll.salary / 12) * paidDays;
+      const fixedGrossSalary = (payroll.salary / daysInMonth) * paidDays;
       const basicDA = Math.round(payroll.salary * 0.5);
       const hra = Math.round(basicDA * 0.5);
       const conveyance = 1200;

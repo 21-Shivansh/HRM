@@ -10,16 +10,21 @@ const StatutoryCompliance = () => {
   const [filteredEmployees, setFilteredEmployees] = useState([]);
   const [selectedEmployee, setSelectedEmployee] = useState(null);
   const [year, setYear] = useState('Year');
-  const [month, setMonth] = useState('Month');
   const [reportTypes, setReportTypes] = useState('Click here to select');
   const [exportFormat, setExportFormat] = useState('pdf'); 
 
   useEffect(() => {
-    // Fetch employee data from the backend
     axios
       .get('http://localhost:5000/api/employees')
       .then((response) => {
-        setEmployees(response.data || []);
+  
+        // Process payroll data for all employees
+        const processedEmployees = response.data.map((employee) => ({
+          ...employee,
+          ...processPayrollData(employee), // Add calculated payroll fields
+        }));
+  
+        setEmployees(processedEmployees); // Update the employees state with processed data
       })
       .catch((error) => {
         console.error('Error fetching employee data:', error);
@@ -43,15 +48,6 @@ const StatutoryCompliance = () => {
   };
   */
 
-  const handleEmployeeSelect = (employee) => {
-    setSearchTerm(employee.name);
-    setFilteredEmployees([]);
-  
-    const payrollData = processPayrollData(employee);
-  
-    setSelectedEmployee({ ...employee, ...payrollData });
-  };
-
   const handleSave = () => {
     alert('Saving the selected reports');
     // Add logic for saving data
@@ -72,50 +68,47 @@ const StatutoryCompliance = () => {
         alert('Preview section not found!');
         return;
       }
-  
-      const originalStyle = previewElement.getAttribute('style'); // Save the original style
-      previewElement.setAttribute(
-        'style',
-        `${originalStyle || ''}; width: 100%; max-width: 100%;`
-      );
-  
+
       const options = {
-        margin: 1,
-        filename: `Statutory_Compliance_${reportTypes}.pdf`,
+        margin: 0, // No margins to capture the full content
+        filename: `Statutory_Compliance_${reportTypes}_for_${year}.pdf`,
         image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: { scale: 2 },
-        jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' },
+        html2canvas: {
+          scale: 2, // Higher scale for better quality
+          useCORS: true, // Enable cross-origin images
+          width: previewElement.scrollWidth, // Capture the full width of the element
+          height: previewElement.scrollHeight, // Capture the full height of the element
+        },
+        jsPDF: {
+          unit: 'px', // Use pixels for better alignment with the screen
+          format: [previewElement.scrollWidth, previewElement.scrollHeight], // Dynamically set the page size
+          orientation: 'portrait', // Use portrait orientation
+        },
       };
-  
+
       html2pdf()
-        .set(options)
-        .from(previewElement)
-        .save()
-        .then(() => {
-          if (originalStyle) {
-            previewElement.setAttribute('style', originalStyle);
-          } else {
-            previewElement.removeAttribute('style');
-        }
+      .set(options)
+      .from(previewElement)
+      .save()
+      .catch((error) => {
+        console.error('Error generating PDF:', error);
       });
     } else if (exportFormat === 'excel') {
       // Excel Download Logic
       const data = [];
-
+  
       // Add header row
-      data.push(['Employee Name', 'Year', 'Month', 'PF', 'ESI', 'PT', 'CTC', 'Gratuity']);
+      const headerRow = ['Employee Name', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec', 'Jan', 'Feb', 'Mar', 'Total'];
+      data.push(headerRow);
 
-      // Add data row
-      data.push([
-        selectedEmployee?.name || 'N/A',
-        year || 'N/A',
-        month || 'N/A',
-        reportTypes.pf ? selectedEmployee?.pf || 'N/A' : 'N/A',
-        reportTypes.esi ? selectedEmployee?.esi || 'N/A' : 'N/A',
-        reportTypes.pt ? selectedEmployee?.pt || 'N/A' : 'N/A',
-        reportTypes.ctc ? selectedEmployee?.ctc || 'N/A' : 'N/A',
-        reportTypes.gratuity ? selectedEmployee?.gratuity || 'N/A' : 'N/A',
-      ]);
+      // Add data rows for all employees
+      employees.forEach((employee) => {
+        const value = employee[reportTypes] || 'N/A'; // Get the value for the selected report type
+        const monthlyValues = Array(12).fill(value); // Repeat the value for all 12 months
+        const total = value !== 'N/A' ? value * 12 : 'N/A'; // Calculate the total
+        const row = [employee.name, ...monthlyValues, total]; // Create a row with employee name, monthly values, and total
+        data.push(row);
+      });
 
       // Create a worksheet and workbook
       const worksheet = XLSX.utils.aoa_to_sheet(data);
@@ -123,7 +116,7 @@ const StatutoryCompliance = () => {
       XLSX.utils.book_append_sheet(workbook, worksheet, 'Statutory Compliance');
 
       // Write the Excel file and trigger download
-      XLSX.writeFile(workbook, `Statutory_Compliance_${selectedEmployee.name || 'Employee'}.xlsx`);
+      XLSX.writeFile(workbook, `Statutory_Compliance_${reportTypes}_for_${year}.xlsx`);
     }
   };
 
@@ -153,7 +146,7 @@ const StatutoryCompliance = () => {
     const employerLWF = lwf * 3;
          
     // Calculate the required fields
-    const esic = Math.ceil(gross >= 21001 ? 0 : earnGross * 0.0075); // ESI
+    const esic = Math.ceil(gross >= 21001 ? 0 : earnGross * 0.0075); // ESIC
     const pt = 200; // PT
     const ctc = earnGross + employerPF + employerESIC + graduity + employerLWF;
     const gratuity = Math.round(earnBasic * 0.0481) + 1; // Gratuity
@@ -203,17 +196,23 @@ const StatutoryCompliance = () => {
               value={year}
               onChange={(e) => setYear(e.target.value)}
             >
+              <option value="Year" disabled>
+                Year
+              </option>
               {Array.from({ length: 11 }, (_, i) => 2015 + i).map((year) => (
                 <option key={year} value={year}>
                   {year}
                 </option>
               ))}
             </select>
-            <select
+            {/* <select
               className="statutory-compliance-select"
               value={month}
               onChange={(e) => setMonth(e.target.value)}
             >
+              <option value="Month" disabled>
+                Month
+              </option>
               {['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'].map(
                 (month) => (
                   <option key={month} value={month}>
@@ -221,7 +220,7 @@ const StatutoryCompliance = () => {
                   </option>
                 )
               )}
-            </select>
+            </select> */}
           </div>
   
           {/* Employee Name and Report Type */}
@@ -234,22 +233,62 @@ const StatutoryCompliance = () => {
   
           {/* Checkboxes for Report Types */}
           <div className="statutory-compliance-dropdown">
-            <label htmlFor="reportTypeSelect">Select Report Type:</label>
-            <select
-              id="reportTypeSelect"
-              className="statutory-compliance-select"
-              value={reportTypes}
-              onChange={(e) => setReportTypes(e.target.value)} // Update report type
-            >
-              <option value="pf">PF Report</option>
-              <option value="esi">ESI Report</option>
-              <option value="pt">PT Report</option>
-              <option value="ctc">Annual CTC Report</option>
-              <option value="gratuity">Gratuity Report</option>
-            </select>
+            <label>Select Report Type:</label>
+            <div className="statutory-compliance-options">
+              <label>
+                <input
+                  type="radio"
+                  name="reportType"
+                  value="pf"
+                  checked={reportTypes === 'pf'}
+                  onChange={(e) => setReportTypes(e.target.value)} // Update report type
+                />
+                PF Report
+              </label>
+              <label>
+                <input
+                  type="radio"
+                  name="reportType"
+                  value="esic"
+                  checked={reportTypes === 'esic'}
+                  onChange={(e) => setReportTypes(e.target.value)} // Update report type
+                />
+                ESIC Report
+              </label>
+              <label>
+                <input
+                  type="radio"
+                  name="reportType"
+                  value="pt"
+                  checked={reportTypes === 'pt'}
+                  onChange={(e) => setReportTypes(e.target.value)} // Update report type
+                />
+                PT Report
+              </label>
+              <label>
+                <input
+                  type="radio"
+                  name="reportType"
+                  value="ctc"
+                  checked={reportTypes === 'ctc'}
+                  onChange={(e) => setReportTypes(e.target.value)} // Update report type
+                />
+                Annual CTC Report
+              </label>
+              <label>
+                <input
+                  type="radio"
+                  name="reportType"
+                  value="gratuity"
+                  checked={reportTypes === 'gratuity'}
+                  onChange={(e) => setReportTypes(e.target.value)} // Update report type
+                />
+                Gratuity Report
+              </label>
+            </div>
           </div>
   
-          {/* Buttons */}8
+          {/* Buttons */}
           <div className="statutory-compliance-buttons">
             <button className="purple-button" >
               Export As
@@ -292,10 +331,10 @@ const StatutoryCompliance = () => {
         {/* Right Section: Preview */}
         <div className="statutory-compliance-preview">
           <h2>Statutory Compliance</h2>
+          <p><strong>Year:</strong> {year || '_________'}</p>
           {/* selectedEmployee ? (
             <>
               <p><strong>Employee Name:</strong> {selectedEmployee?.name || '_________'}</p>
-              <p><strong>Year:</strong> {year || '_________'}</p>
               <p><strong>Month:</strong> {month || '_________'}</p>
               <hr />
               <h3>Selected Report(s)</h3>
@@ -359,8 +398,6 @@ const StatutoryCompliance = () => {
                     
                     const value = employee[reportTypes] || 'N/A'; 
                     const total = value !== 'N/A' ? value * 12 : 'N/A'; 
-                    console.log('Selected Report Type:', reportTypes);
-                    console.log('Employees Data:', employees);
 
                     return (
                       <tr key={employee.id}>
