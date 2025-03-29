@@ -25,22 +25,25 @@ const AttendanceReports = () => {
 
   const fetchEmployees = async () => {
     try {
-      const response = await fetch('http://localhost:5000/api/employees');
+      const response = await fetch(`http://localhost:5000/api/employees?month=${selectedMonth}&year=${selectedYear}`);
       const data = await response.json();
+  
       setAttendanceData(data.map(emp => ({
         ...emp,
         unpaidLeaves: emp.unpaid_leaves || 0,
-        availedLeaves: 0,
-        addOnLeaves: prevAddOnLeaves[emp.id] || 0,
+        availedLeaves: emp.availed_leaves || 0, 
+        addOnLeaves: emp.add_on_leaves || 0,  // Persist add-on leaves
       })));
     } catch (error) {
       console.error('Error fetching employees:', error);
     }
   };
+  
 
   useEffect(() => {
     fetchEmployees();
   }, [selectedMonth]);
+  
 
   const calculatePayable = (emp) => {
     const daysInMonth = getDaysInMonth(selectedMonth, selectedYear);
@@ -53,19 +56,24 @@ const AttendanceReports = () => {
   };
 
   const handleAvailedLeaveChange = (id, value) => {
-    const newValue = Math.min(Math.max(parseInt(value) || 0, 0), 2);
-    const updatedEmployee = attendanceData.find(emp => emp.id === id);
-    if (!updatedEmployee) return;
+    setAttendanceData(prevData => {
+      return prevData.map(emp => {
+        if (emp.id === id) {
+          const paidLeaves = 2; // Default paid leaves
+          const addOnLeaves = emp.addOnLeaves || 0; // Use the actual add-on leaves from state
+          const maxAvailedLeaves = paidLeaves + addOnLeaves; // Dynamic limit
+          const newValue = Math.min(Math.max(parseInt(value) || 0), maxAvailedLeaves);
   
-    setAttendanceData(prevData =>
-      prevData.map(emp =>
-        emp.id === id ? { ...emp, availedLeaves: newValue, addOnLeaves: calculateAddOnLeaves(emp) } : emp
-      )
-    );
+          // Update the backend with the new values
+          updateEmployeeLeaves(id, newValue, addOnLeaves, emp.unpaidLeaves);
   
-    updateEmployeeLeaves(id, newValue, calculateAddOnLeaves(updatedEmployee), updatedEmployee.unpaidLeaves);
+          return { ...emp, availedLeaves: newValue };
+        }
+        return emp;
+      });
+    });
   };
-
+  
   const updateEmployeeLeaves = async (id, availedLeaves, addOnLeaves, unpaidLeaves) => {
     try {
       const response = await fetch('http://localhost:5000/api/employees/update-leaves', {

@@ -28,15 +28,23 @@ app.get('/api/employees', (req, res) => {
   const { month, year } = req.query;
 
   const sql = `
-    SELECT e.id, e.name, e.salary, COALESCE(l.unpaid_leaves, 0) AS unpaid_leaves, 
+    SELECT e.id, e.name, e.salary, 
+           COALESCE(l.unpaid_leaves, 0) AS unpaid_leaves, 
            COALESCE(l.availed_leaves, 0) AS availed_leaves, 
-           COALESCE(l.add_on_leaves, 0) AS add_on_leaves
+           COALESCE(prev_l.add_on_leaves, 0) AS add_on_leaves
     FROM emp_data e
     LEFT JOIN employee_leaves l 
       ON e.id = l.employee_id AND l.month = ? AND l.year = ?
+    LEFT JOIN employee_leaves prev_l
+      ON e.id = prev_l.employee_id 
+      AND prev_l.year = ? 
+      AND prev_l.month = (SELECT CASE 
+                                  WHEN ? = 'January' THEN 'December' 
+                                  ELSE DATE_FORMAT(STR_TO_DATE(CONCAT('1 ', ?, ' 2000'), '%d %M %Y') - INTERVAL 1 MONTH, '%M') 
+                               END)
   `;
 
-  db.query(sql, [month, year], (err, result) => {
+  db.query(sql, [month, year, year, month, month], (err, result) => {
     if (err) {
       console.error('Database Error:', err);
       return res.status(500).send(err);
@@ -45,9 +53,13 @@ app.get('/api/employees', (req, res) => {
   });
 });
 
+
 // Route to update employee leaves
 app.put('/api/employees/update-leaves', (req, res) => {
   const { employee_id, month, year, availed_leaves, add_on_leaves, unpaid_leaves } = req.body;
+
+  console.log(`Updating Leaves for Employee ${employee_id} - ${month} ${year}`);
+  console.log(`Availed: ${availed_leaves}, Add-on: ${add_on_leaves}, Unpaid: ${unpaid_leaves}`);
 
   const updateLeavesSql = `
     INSERT INTO employee_leaves (employee_id, month, year, availed_leaves, add_on_leaves, unpaid_leaves)
@@ -63,9 +75,11 @@ app.put('/api/employees/update-leaves', (req, res) => {
       console.error('SQL Error:', err.sqlMessage);
       return res.status(500).send(err);
     }
+    console.log('Employee leave data updated successfully');
     res.status(200).send('Employee leave data updated successfully');
   });
 });
+
 
 // Route to add a payment
 app.post('/api/payments', (req, res) => {

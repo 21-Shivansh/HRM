@@ -14,6 +14,7 @@ const SalaryPaymentSingle = ({ employee, month, year, divBox=true }) => {
   };
 
   useEffect(() => {
+    console.log('employee_data',employee);
     if (employee && month && year) {
       
       // Perform calculations based on the formulas
